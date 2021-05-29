@@ -1,6 +1,6 @@
 
 window.onload = () =>
 {
-    alert('it works!')
+    alert('yay!')
 }
 
