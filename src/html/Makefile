@@ -1,5 +1,5 @@
 
-COMPILER=python ../../htmltemplate.py
+COMPILER=python ../../scripts/htmltemplate.py
 OUT=../../out
 SOURCES = index.htmlc
 
