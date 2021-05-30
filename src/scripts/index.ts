@@ -1,6 +1,9 @@
 
 window.onload = () =>
 {
-    const category = Category.new('test')
-    console.log(category)
+    ['test', 'other test'].forEach(item =>
+    {
+        const category = Category.new(item)
+        console.log(category)
+    })
 }
