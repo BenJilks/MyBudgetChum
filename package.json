@@ -1,6 +1,6 @@
 {
   "dependencies": {
+    "minify": "^7.0.2",
     "typescript": "^4.3.2"
   }
 }
-
