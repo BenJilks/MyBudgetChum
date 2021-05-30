@@ -1,6 +1,6 @@
 
 window.onload = () =>
 {
-    alert('yay!')
+    const category = Category.new('test')
+    console.log(category)
 }
-

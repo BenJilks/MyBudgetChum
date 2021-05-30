@@ -2,10 +2,10 @@
 TSC=../../node_modules/.bin/tsc
 OUT=../../out
 
-SCRIPTS = index.js
+INDEX = index.ts database.ts transaction.ts
 
-%.js: %.ts
-	$(TSC) $< --outFile $(OUT)/$@
+index:
+	$(TSC) $(INDEX) --lib es2015,dom --outFile $(OUT)/index.js
 
-all: $(SCRIPTS)
+all: index
 
