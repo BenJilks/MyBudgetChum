@@ -1,0 +1,26 @@
+
+Key features:
+    Input monthly/weekly budget
+    Input spending and receiving on money
+        Category
+        Place / Person
+        Notes
+    Display monthly/weekly budget usage by either category or place
+        Pie chart
+        Bar graph
+
+Important features:
+    Allow adding repeat transactions
+    Add debts that can be later payed off
+        Manually or automatically with repeat transactions
+    Show largest areas of spending
+        Any more detailed analysis with current data
+    Should run on Windows XP
+
+Nice features:
+    Connect with other people locally (no WiFi needed)
+    Add friends
+        Allow requesting and giving money, auto adding it to debts
+    Nice animations for high power devices
+    Scan receipts?
+
