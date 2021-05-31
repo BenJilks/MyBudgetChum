@@ -1,7 +1,7 @@
 
 class Category
 {
-    name: string
+    public readonly name: string
 
     private constructor(name: string)
     {
@@ -11,9 +11,13 @@ class Category
     public static async new(name: string): Promise<Category>
     {
         const category = new Category(name)
-
         await DataBase.the().insert('categories', category)
         return category
+    }
+
+    public static get_all(): Promise<Category[]>
+    {
+        return DataBase.the().get('categories')
     }
 }
 
