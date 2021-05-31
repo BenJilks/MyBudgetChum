@@ -24,8 +24,20 @@ window.onload = async () =>
     category_list = document.getElementById('category-list')
     category_input = document.getElementById('category-input');
 
-    (await Category.get_all()).forEach(item =>
+    const categories = await Category.get_all()
+    categories.forEach(item =>
     {
         category_list.appendChild(template(item.name, item.name))
     })
+
+    try
+    {
+        const food = await Category.new('food')
+        const coop = await Place.new('coop')
+        const transaction = await Transaction.new(2.50, food, coop)
+    }
+    catch
+    {
+        console.log('Already added test transaction')
+    }
 }

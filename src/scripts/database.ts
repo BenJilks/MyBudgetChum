@@ -12,15 +12,29 @@ class DataBase
     private notify_when_transaction_is_done: (() => void)[]
     private notify_when_database_is_ready: (() => void)[]
 
-    private create_new_database(event: IDBVersionChangeEvent)
+    private async create_new_database(event: IDBVersionChangeEvent)
     {
         const database: IDBDatabase = (event.target as any).result
 
-        const categories = database.createObjectStore('categories', { keyPath: 'name' })
-        categories.transaction.oncomplete = () =>
+        const create_table = (table, key) =>
         {
-            this.init_database(database)
+            return new Promise((resolve) =>
+            {
+                const categories = database.createObjectStore(table, { keyPath: key })
+                categories.transaction.oncomplete = () =>
+                {
+                    resolve(null)
+                }
+            })
         }
+
+        await Promise.all(
+        [ 
+            create_table('categories', 'name'),
+            create_table('places', 'name'),
+            create_table('transactions', 'timestamp'),
+        ])
+        this.init_database(database)
     }
 
     private ensure_database_is_ready(): Promise<void>

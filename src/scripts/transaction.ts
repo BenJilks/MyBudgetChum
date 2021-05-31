@@ -23,28 +23,52 @@ class Category
 
 class Place
 {
-    name: string
+    public readonly name: string
+
+    private constructor(name: string)
+    {
+        this.name = name
+    }
+
+    public static async new(name: string): Promise<Place>
+    {
+        const category = new Place(name)
+        await DataBase.the().insert('places', category)
+        return category
+    }
+
+    public static get_all(): Promise<Place[]>
+    {
+        return DataBase.the().get('places')
+    }
 }
 
 class Transaction
 {
 
-    private id: number
-    private amount: number
-    private category: Category
-    private place: Place
+    public readonly timestamp: Date
+    public readonly amount: number
+    public readonly category: Category
+    public readonly place: Place
 
-    private constructor(id: number, amount: number, category: Category, place: Place)
+    private constructor(amount: number, category: Category, place: Place)
     {
-        this.id = id
+        this.timestamp = new Date(Date.now())
         this.amount = amount
         this.category = category
         this.place = place
     }
 
-    public static new(amount: number, category: Category, place: Place): Transaction
+    public static async new(amount: number, category: Category, place: Place): Promise<Transaction>
     {
-        return new Transaction(0, amount, category, place)
+        const transaction = new Transaction(amount, category, place)
+        await DataBase.the().insert('transactions', transaction)
+        return transaction
+    }
+
+    public static get_all(): Promise<Transaction[]>
+    {
+        return DataBase.the().get('transactions')
     }
 
 }
