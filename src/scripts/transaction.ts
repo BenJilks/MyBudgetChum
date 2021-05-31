@@ -8,11 +8,11 @@ class Category
         this.name = name
     }
 
-    public static new(name: string): Category
+    public static async new(name: string): Promise<Category>
     {
         const category = new Category(name)
 
-        DataBase.the().insert('categories', { 'name': name })
+        await DataBase.the().insert('categories', category)
         return category
     }
 }

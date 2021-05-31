@@ -37,7 +37,10 @@ class DataBase
         })
     }
 
-    private create_transaction(table: string, mode?: IDBTransactionMode): Promise<IDBTransaction>
+    private create_transaction(
+            table: string, mode: IDBTransactionMode, 
+            success?: () => void, error?: (code: any) => void)
+        : Promise<IDBTransaction>
     {
         return new Promise(async (resolve) =>
         {
@@ -54,8 +57,18 @@ class DataBase
                 }
 
                 const transaction = this.database.transaction([table], mode)
-                transaction.onerror = () => on_transaction_done()
-                transaction.oncomplete = () => on_transaction_done()
+                transaction.onerror = (event: Event) => 
+                {
+                    on_transaction_done()
+                    if (error)
+                        error((event.target as any).errorCode)
+                }
+                transaction.oncomplete = () => 
+                {
+                    on_transaction_done()
+                    if (success)
+                        success()
+                }
                 resolve(transaction)
             }
 
@@ -72,7 +85,10 @@ class DataBase
     {
         return new Promise(async (resolve, reject) =>
         {
-            const transaction = await this.create_transaction(table, "readwrite")
+            const success = () => resolve()
+            const error = (code) => reject(code)
+
+            const transaction = await this.create_transaction(table, "readwrite", success, error)
             const store_object = transaction.objectStore(table)
             store_object.add(item)
         })
@@ -96,7 +112,7 @@ class DataBase
         this.database.onerror = (event) =>
         {
             // TODO: Do something more sensible here
-            alert(`Database error ${ (event.target as any).errorCode }`)
+            console.log(`Database error ${ (event.target as any).errorCode }`)
         }
 
         // Tell everyone that the database is ready to use

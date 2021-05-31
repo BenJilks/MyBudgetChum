@@ -1,9 +1,16 @@
 
 window.onload = () =>
 {
-    ['test', 'other test'].forEach(item =>
+    ['test', 'other test'].forEach(async item =>
     {
-        const category = Category.new(item)
-        console.log(category)
+        try
+        {
+            const category = await Category.new(item)
+            console.log(category)
+        }
+        catch (e)
+        {
+            console.log(e)
+        }
     })
 }
