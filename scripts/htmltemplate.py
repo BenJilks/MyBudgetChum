@@ -11,7 +11,7 @@ def resolve_template(file_path):
             out += input_content
             break
 
-        template = resolve_template(handle.group(0)[2:-2])
+        template = resolve_template(handle.group(0)[2:-2].strip())
         span = handle.span()
         out += input_content[:span[0]] + template
         input_content = input_content[span[1]:]
