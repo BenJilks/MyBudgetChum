@@ -3,6 +3,7 @@ MINIFY=./node_modules/.bin/minify
 
 debug:
 	+"$(MAKE)" -C src/scripts
+	+"$(MAKE)" -C src/styles
 	+"$(MAKE)" -C src/html
 
 release: debug

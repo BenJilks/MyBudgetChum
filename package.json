@@ -2,6 +2,7 @@
   "dependencies": {
     "handlebars": "^4.7.7",
     "minify": "^7.0.2",
+    "sass": "^1.34.0",
     "typescript": "^4.3.2"
   }
 }
