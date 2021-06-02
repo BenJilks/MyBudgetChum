@@ -16,12 +16,16 @@ class DataBase
     {
         const database: IDBDatabase = (event.target as any).result
 
-        const create_table = (table, key) =>
+        const create_table = (table: string, key?: string) =>
         {
             return new Promise((resolve) =>
             {
-                const categories = database.createObjectStore(table, { keyPath: key })
-                categories.transaction.oncomplete = () =>
+                const store =
+                    key == null
+                    ? database.createObjectStore(table, { autoIncrement : true })
+                    : database.createObjectStore(table, { keyPath: key })
+
+                store.transaction.oncomplete = () =>
                 {
                     resolve(null)
                 }
@@ -33,6 +37,7 @@ class DataBase
             create_table('categories', 'name'),
             create_table('places', 'name'),
             create_table('transactions', 'timestamp'),
+            create_table('repeat'),
         ])
         this.init_database(database)
     }
@@ -51,9 +56,7 @@ class DataBase
         })
     }
 
-    private create_transaction(
-            table: string, mode: IDBTransactionMode, 
-            success?: () => void, error?: (code: any) => void)
+    private create_transaction(table: string, mode: IDBTransactionMode)
         : Promise<IDBTransaction>
     {
         return new Promise(async (resolve) =>
@@ -71,18 +74,8 @@ class DataBase
                 }
 
                 const transaction = this.database.transaction([table], mode)
-                transaction.onerror = (event: Event) => 
-                {
-                    on_transaction_done()
-                    if (error)
-                        error((event.target as any).errorCode)
-                }
-                transaction.oncomplete = () => 
-                {
-                    on_transaction_done()
-                    if (success)
-                        success()
-                }
+                transaction.onerror = (event: Event) => on_transaction_done()
+                transaction.oncomplete = () => on_transaction_done()
                 resolve(transaction)
             }
 
@@ -95,29 +88,45 @@ class DataBase
         })
     }
 
-    public insert(table: string, item: object): Promise<void>
+    private do_request<T>(table: string, on_request: (IDBObjectStore) => IDBRequest, on_result: (IDBRequest) => T): Promise<T>
     {
         return new Promise(async (resolve, reject) =>
         {
-            const success = () => resolve()
-            const error = (code) => reject(code)
-
-            const transaction = await this.create_transaction(table, "readwrite", success, error)
+            const transaction = await this.create_transaction(table, "readwrite")
             const store_object = transaction.objectStore(table)
-            store_object.add(item)
+
+            const request = on_request(store_object)
+            request.onerror = () => reject()
+            request.onsuccess = () => resolve(on_result(request))
         })
     }
 
-    public get<T>(table: string, query?: IDBValidKey | IDBKeyRange): Promise<T[]>
+    public insert(table: string, item: object): Promise<any>
     {
-        return new Promise(async (resolve, reject) =>
-        {
-            const transaction = await this.create_transaction(table, "readonly")
-            const store_object = transaction.objectStore(table)
-            const request = store_object.getAll(query)
-            request.onerror = () => reject()
-            request.onsuccess = () => resolve(request.result as T[])
-        })
+        return this.do_request(table, 
+            store => store.add(item), 
+            request => request.result)
+    }
+
+    public get(table: string, query?: IDBValidKey | IDBKeyRange): Promise<any[]>
+    {
+        return this.do_request(table, 
+            store => store.getAll(query), 
+            request => request.result)
+    }
+
+    public getKeys(table: string, query?: IDBValidKey | IDBKeyRange): Promise<any>
+    {
+        return this.do_request(table, 
+            store => store.getAllKeys(query), 
+            request => request.result)
+    }
+
+    public update(table: string, key: IDBValidKey, item: object): Promise<void>
+    {
+        return this.do_request(table, 
+            store => store.put(item, key), 
+            () => null)
     }
 
     private init_database(database: IDBDatabase)

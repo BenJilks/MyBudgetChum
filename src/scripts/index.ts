@@ -21,6 +21,17 @@ async function add()
 
 window.onload = async () =>
 {
+    try
+    {
+        const food = await Category.new('food')
+        const coop = await Place.new('coop')
+        await Repeat.new(2.50, food, coop, new RepeatTimer({ 'type': RepeatType.DAILY }))
+    }
+    catch
+    {
+        console.log('Already added test repeat')
+    }
+
     category_list = document.getElementById('category-list')
     category_input = document.getElementById('category-input');
 
@@ -30,14 +41,10 @@ window.onload = async () =>
         category_list.appendChild(template(item.name, item.name))
     })
 
-    try
+    const repeats = await Repeat.get_all()
+    repeats.forEach(async item =>
     {
-        const food = await Category.new('food')
-        const coop = await Place.new('coop')
-        const transaction = await Transaction.new(2.50, food, coop)
-    }
-    catch
-    {
-        console.log('Already added test transaction')
-    }
+        console.log(item)
+        console.log(await item.trigger_if_timer_condition_is_met())
+    })
 }

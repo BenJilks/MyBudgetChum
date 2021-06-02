@@ -71,4 +71,9 @@ class Transaction
         return DataBase.the().get('transactions')
     }
 
+    public static get_in_range(from: Date, to: Date): Promise<Transaction[]>
+    {
+        return DataBase.the().get('transactions', IDBKeyRange.bound(from, to))
+    }
+
 }
