@@ -51,17 +51,17 @@ class Transaction
     public readonly category: Category
     public readonly place: Place
 
-    private constructor(amount: number, category: Category, place: Place)
+    private constructor(amount: number, category: Category, place: Place, timestamp?: Date)
     {
-        this.timestamp = new Date(Date.now())
+        this.timestamp = timestamp ?? new Date(Date.now())
         this.amount = amount
         this.category = category
         this.place = place
     }
 
-    public static async new(amount: number, category: Category, place: Place): Promise<Transaction>
+    public static async new(amount: number, category: Category, place: Place, timestamp?: Date): Promise<Transaction>
     {
-        const transaction = new Transaction(amount, category, place)
+        const transaction = new Transaction(amount, category, place, timestamp)
         await DataBase.the().insert('transactions', transaction)
         return transaction
     }

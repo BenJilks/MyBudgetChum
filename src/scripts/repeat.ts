@@ -13,7 +13,7 @@ class RepeatTimer
     public readonly type: RepeatType
     public readonly month: number
     public readonly month_day: number
-    public readonly week_day: 0 | 1 | 2 | 3 | 4 | 5 | 6
+    public readonly week_day: number
     public readonly hour: number
     private next: number
 
@@ -65,6 +65,11 @@ class RepeatTimer
     public has_been_met(): boolean
     {
         return Date.now() >= this.next
+    }
+
+    public get_next_date(): Date
+    {
+        return new Date(this.next)
     }
 
     public trigger()
@@ -129,8 +134,8 @@ class Repeat
         let did_trigger = false
         while (this.timer.has_been_met())
         {
+            await Transaction.new(this.amount, this.category, this.place, this.timer.get_next_date())
             this.timer.trigger()
-            await Transaction.new(this.amount, this.category, this.place)
             did_trigger = true
         }
 
