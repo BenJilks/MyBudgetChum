@@ -2,9 +2,13 @@
 SASS="../../node_modules/.bin/sass"
 OUT=../../out
 SOURCES = index.css
+FLAGS=
 
 %.css: %.sass
-	$(SASS) $<:$(OUT)/$@
+	$(SASS) $(FLAGS) $<:$(OUT)/$@ &
 
 all: $(SOURCES)
+
+watch: FLAGS=-w
+watch: all
 
