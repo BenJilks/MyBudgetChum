@@ -1,24 +1,4 @@
 
-var category_list, category_input
-
-function template(title: string, content: string)
-{
-    const element = document.createElement('div')
-    element.innerHTML = `
-        <h1>${ title }</h1>
-        <p>${ content }</p>
-    `
-
-    return element
-}
-
-async function add()
-{
-    const name = category_input.value
-    await Category.new(name)
-    category_list.appendChild(template(name, name))
-}
-
 window.onload = async () =>
 {
     try
@@ -32,19 +12,15 @@ window.onload = async () =>
         console.log('Already added test repeat')
     }
 
-    category_list = document.getElementById('category-list')
-    category_input = document.getElementById('category-input');
-
-    const categories = await Category.get_all()
-    categories.forEach(item =>
-    {
-        category_list.appendChild(template(item.name, item.name))
-    })
-
     const repeats = await Repeat.get_all()
     repeats.forEach(async item =>
     {
         console.log(item)
         console.log(await item.trigger_if_timer_condition_is_met())
     })
+
+    const from = new Date(2021, 5, 3)
+    const to = new Date(Date.now())
+    console.log(await create_report(from, to, ReportType.CATEGORY))
+    console.log(await create_report(from, to, ReportType.PLACE))
 }
