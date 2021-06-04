@@ -4,12 +4,25 @@ from time import sleep
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-def resolve_template(file_path: str) -> (str, [str]):
+def decode_handle(handle: str) -> (str, {str: str}):
+    parts = handle.strip().split(' ')
+    if len(parts) < 1:
+        return None, None
+    
+    vars = {}
+    for part in parts[1:]:
+        name, value = part.split('=')
+        vars[name] = value
+    return parts[0], vars
+
+def resolve_template(file_path: str, vars: {str: str} = {}) -> (str, [str]):
     if not os.path.isfile(file_path):
         return "{{ Error, no such file '%s' }}"%file_path, []
 
     with open(file_path, 'r') as f:
         input_content = f.read()
+        for name in vars:
+            input_content = re.sub('{{ ' + name + ' }}', vars[name], input_content)
 
     out = ''
     dependencies = [file_path]
@@ -19,8 +32,12 @@ def resolve_template(file_path: str) -> (str, [str]):
             out += input_content
             break
 
-        template, sub_dependencies = resolve_template(handle.group(0)[2:-2].strip())
-        dependencies += sub_dependencies
+        file_path, vars = decode_handle(handle.group(0)[2:-2])
+        if file_path != None:
+            template, sub_dependencies = resolve_template(file_path, vars)
+            dependencies += sub_dependencies
+        else:
+            template = "{{ Invalid handle '" + handle.group(0)[2:-2] + "' }}"
 
         span = handle.span()
         out += input_content[:span[0]] + template

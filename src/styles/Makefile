@@ -1,7 +1,7 @@
 
 SASS="../../node_modules/.bin/sass"
 OUT=../../out
-SOURCES = index.css
+SOURCES = index.css pi_chart.css
 FLAGS=
 
 %.css: %.sass

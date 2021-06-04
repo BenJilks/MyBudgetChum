@@ -1,0 +1,35 @@
+
+$ring-width: 6em
+
+.pi-chart
+    display: flex
+    position: relative
+    align-items: center
+    justify-content: center
+    overflow: hidden
+
+    #ring-container
+        position: relative
+        width: 70%
+        max-width: 40em
+        aspect-ratio: 1
+
+        .ring
+            position: absolute
+            left: 0
+            top: 0
+            width: calc(100% - #{$ring-width * 2})
+            height: calc(100% - #{$ring-width * 2})
+            border-radius: 50%
+            border: solid white $ring-width
+            transition: transform 0.2s
+    
+    #description
+        position: absolute
+        width: calc(65% - #{$ring-width})
+        font-size: 2em
+        overflow-wrap: anywhere
+        text-align: center
+        opacity: 0
+        transition: opacity 0.2s
+        pointer-events: none

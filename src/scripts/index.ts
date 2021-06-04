@@ -1,11 +1,6 @@
 
-let pi_chart
-
 window.onload = async () =>
 {
-    pi_chart = new PiChart(document.getElementById('pi-chart') as HTMLDivElement)
-    pi_chart.set_data(new Map(Object.entries({'spoons': 3, 'trans matt': 6, 'just eat voucher': 1})))
-
     try
     {
         const food = await Category.new('food')
@@ -24,8 +19,10 @@ window.onload = async () =>
         console.log(await item.trigger_if_timer_condition_is_met())
     })
 
+    const category_pi_chart = new PiChart(document.getElementById('category-pi-chart') as HTMLDivElement)
+    const place_pi_chart = new PiChart(document.getElementById('place-pi-chart') as HTMLDivElement)
     const from = new Date(2021, 5, 3)
     const to = new Date(Date.now())
-    console.log(await create_report(from, to, ReportType.CATEGORY))
-    console.log(await create_report(from, to, ReportType.PLACE))
+    category_pi_chart.set_data(await create_report(from, to, ReportType.CATEGORY))
+    place_pi_chart.set_data(await create_report(from, to, ReportType.PLACE))
 }

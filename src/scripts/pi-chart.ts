@@ -17,6 +17,8 @@ class PiChart
 
     public set_data(data: Map<string, number>)
     {
+        console.log(data)
+
         // Calculate total
         let total = 0
         data.forEach(num => total += num)
@@ -37,7 +39,7 @@ class PiChart
             ring.onmouseenter = () =>
             {
                 ring.style.transform = rotation + ' scale(1.1)'
-                this.description.innerHTML = category
+                this.description.innerHTML = `${category}: £${num} (${Math.round(percent * 100)}%)`
                 this.description.style.color = color
                 this.description.style.opacity = '1'
             }

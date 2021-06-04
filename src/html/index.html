@@ -2,9 +2,13 @@
     <head>
         {{ header.html }}
         <link rel="stylesheet" href="index.css">
+        <link rel="stylesheet" href="pi_chart.css">
         <script src='index.js'></script>
     </head>
     <body>
-        {{ pi_chart.html }}
+        <div id="test-charts">
+            {{ pi_chart.html id=category-pi-chart }}
+            {{ pi_chart.html id=place-pi-chart }}
+        </div>
     </body>
 </html>

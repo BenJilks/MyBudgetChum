@@ -1,15 +1,13 @@
 
-type Report = {[category: string]: number}
-
 enum ReportType
 {
     CATEGORY,
     PLACE,
 }
 
-async function create_report(from: Date, to: Date, type: ReportType): Promise<Report>
+async function create_report(from: Date, to: Date, type: ReportType): Promise<Map<string, number>>
 {
-    let report: Report = {}
+    let report = new Map()
 
     const transactions = await Transaction.get_in_range(from, to)
     transactions.forEach(transaction =>
@@ -18,9 +16,7 @@ async function create_report(from: Date, to: Date, type: ReportType): Promise<Re
             ? transaction.category.name
             : transaction.place.name
 
-        if (!(category in report))
-            report[category] = 0
-        report[category] += transaction.amount
+        report.set(category, (report.get(category) ?? 0) + transaction.amount)
     })
 
     return report
