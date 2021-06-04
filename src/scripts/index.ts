@@ -1,6 +1,11 @@
 
+let pi_chart
+
 window.onload = async () =>
 {
+    pi_chart = new PiChart(document.getElementById('pi-chart') as HTMLDivElement)
+    pi_chart.set_data(new Map(Object.entries({'spoons': 3, 'trans matt': 6, 'just eat voucher': 1})))
+
     try
     {
         const food = await Category.new('food')
