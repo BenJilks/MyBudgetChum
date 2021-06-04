@@ -22,7 +22,7 @@ def resolve_template(file_path: str, vars: {str: str} = {}) -> (str, [str]):
     with open(file_path, 'r') as f:
         input_content = f.read()
         for name in vars:
-            input_content = re.sub('{{ ' + name + ' }}', vars[name], input_content)
+            input_content = re.sub('{{\\s*' + name + '\\s*}}', vars[name], input_content)
 
     out = ''
     dependencies = [file_path]
