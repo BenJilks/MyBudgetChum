@@ -19,10 +19,6 @@ window.onload = async () =>
         console.log(await item.trigger_if_timer_condition_is_met())
     })
 
-    const category_pi_chart = new PiChart(document.getElementById('category-pi-chart') as HTMLDivElement)
-    const place_pi_chart = new PiChart(document.getElementById('place-pi-chart') as HTMLDivElement)
-    const from = new Date(2021, 5, 3)
-    const to = new Date(Date.now())
-    category_pi_chart.set_data(await create_report(from, to, ReportType.CATEGORY))
-    place_pi_chart.set_data(await create_report(from, to, ReportType.PLACE))
+    const bar_chart = new BarChart(document.getElementById('bar-chart') as HTMLDivElement)
+    bar_chart.set_data([1, 2, -4, 5, -5, 4, 2, 0, 7, -2])
 }

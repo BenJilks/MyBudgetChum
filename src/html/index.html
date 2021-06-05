@@ -3,12 +3,10 @@
         {{ header.html }}
         <link rel="stylesheet" href="index.css">
         <link rel="stylesheet" href="pi_chart.css">
+        <link rel="stylesheet" href="bar_chart.css">
         <script src='index.js'></script>
     </head>
     <body>
-        <div id="test-charts">
-            {{ pi_chart.html id=category-pi-chart }}
-            {{ pi_chart.html id=place-pi-chart }}
-        </div>
+        {{ bar_chart.html id=bar-chart }}
     </body>
 </html>

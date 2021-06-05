@@ -4,20 +4,18 @@ class PiChart
 
     private static readonly COLORS = ['lightgreen', 'lightblue', 'white']
 
-    private container: HTMLDivElement
     private description: HTMLParagraphElement
     private ring_container: HTMLDivElement
 
     public constructor(container: HTMLDivElement)
     {
-        this.container = container
         this.description = container.querySelector('#description')
         this.ring_container = container.querySelector('#ring-container')
     }
 
     public set_data(data: Map<string, number>)
     {
-        console.log(data)
+        this.ring_container.innerHTML = ''
 
         // Calculate total
         let total = 0
