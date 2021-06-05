@@ -11,24 +11,31 @@ class BarChart
 
     public set_data(data: number[])
     {
+        const max = Math.max(...data.map(Math.abs))
+
         this.bar_container.innerHTML = ''
         data.forEach((item, index) =>
-            this.add_bar(item, index + 1))
+            this.add_bar(item, max, index + 1))
     }
 
-    private add_bar(value: number, index: number)
+    private add_bar(value: number, max: number, index: number)
     {
         const unit = document.createElement('div')
         unit.className = 'unit'
 
+        const percent = value / max * 0.8
         const bar = document.createElement('div')
         bar.id = 'bar'
-        bar.style.height = Math.abs(value) + 'em'
-        bar.style.marginTop = `${ -Math.max(value, 0) }em`
+        bar.style.height = Math.abs(percent)*50 + '%'
         if (value >= 0)
+        {
             bar.style.backgroundColor = 'lightgreen'
+            bar.style.transform = `translateY(-100%)`
+        }
         else
+        {
             bar.style.backgroundColor = 'red'
+        }
         
         const label = document.createElement('text')
         label.id = 'label'
