@@ -38,6 +38,7 @@ class DataBase
             create_table('places', 'name'),
             create_table('transactions', 'timestamp'),
             create_table('repeat'),
+            create_table('config', 'key'),
         ])
         this.init_database(database)
     }

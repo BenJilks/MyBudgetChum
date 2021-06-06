@@ -9,16 +9,21 @@ class BarChart
         this.bar_container = container.querySelector('#bar-container')
     }
 
-    public set_data(data: number[])
+    public async set_data(data: number[])
     {
         const max = Math.max(...data.map(Math.abs))
 
         this.bar_container.innerHTML = ''
+
+        const bar_promises: Promise<HTMLDivElement>[] = []
         data.forEach((item, index) =>
-            this.add_bar(item, max, index + 1))
+            bar_promises.push(this.add_bar(item, max, index + 1)))
+        
+        const bars = await Promise.all(bar_promises)
+        bars.forEach(item => this.bar_container.appendChild(item))
     }
 
-    private add_bar(value: number, max: number, index: number)
+    private async add_bar(value: number, max: number, index: number): Promise<HTMLDivElement>
     {
         const unit = document.createElement('div')
         unit.className = 'unit'
@@ -39,7 +44,7 @@ class BarChart
         
         const label = document.createElement('text')
         label.id = 'label'
-        label.innerHTML = `£${ Math.round(value * 100) / 100 }`
+        label.innerHTML = `${ await format_money(value) }`
         if (value >= 0)
             label.style.top = `-${ 0.6 * 2 }em`
         else
@@ -52,7 +57,7 @@ class BarChart
         bar.appendChild(label)
         unit.appendChild(bar)
         unit.appendChild(x_label)
-        this.bar_container.appendChild(unit)
+        return unit
     }
 
 }

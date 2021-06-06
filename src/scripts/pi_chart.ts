@@ -34,10 +34,10 @@ class PiChart
             ring.style.transform = rotation
             ring.style.borderColor = color
 
-            ring.onmouseenter = () =>
+            ring.onmouseenter = async () =>
             {
                 ring.style.transform = rotation + ' scale(1.1)'
-                this.description.innerHTML = `${category}: £${num} (${Math.round(percent * 100)}%)`
+                this.description.innerHTML = `${category}: ${ await format_money(num) } (${Math.round(percent * 100)}%)`
                 this.description.style.color = color
                 this.description.style.opacity = '1'
             }
