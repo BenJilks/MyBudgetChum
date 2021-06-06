@@ -1,5 +1,6 @@
+import { DataBase } from './database'
 
-abstract class Group
+export abstract class Group
 {
 
     public readonly name: string
@@ -13,7 +14,7 @@ abstract class Group
 
 }
 
-class Category extends Group
+export class Category extends Group
 {
 
     public static async new(name: string, color: number): Promise<Category>
@@ -30,7 +31,7 @@ class Category extends Group
 
 }
 
-class Place extends Group
+export class Place extends Group
 {
 
     public static async new(name: string, color: number): Promise<Place>
@@ -47,7 +48,7 @@ class Place extends Group
 
 }
 
-class Transaction
+export class Transaction
 {
 
     public readonly timestamp: Date

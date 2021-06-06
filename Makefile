@@ -2,12 +2,12 @@
 MINIFY=./node_modules/.bin/minify
 
 debug:
-	+"$(MAKE)" -C src/scripts
+	npx rollup -c rollup.config.js
 	+"$(MAKE)" -C src/styles
 	+"$(MAKE)" -C src/html
 
 watch:
-	+"$(MAKE)" -C src/scripts watch &
+	npx rollup -c rollup.config.js -w &
 	+"$(MAKE)" -C src/styles watch &
 	+"$(MAKE)" -C src/html watch
 

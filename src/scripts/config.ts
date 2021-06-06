@@ -1,3 +1,4 @@
+import { DataBase } from './database'
 
 class Config
 {
@@ -99,12 +100,11 @@ const CURRENCIES: Map<string, Currency> = new Map(
     ['BTC', make_currency('Bitcoin', '₿', CurrencyFormatType.Prefix)],
 ])
 
-async function format_money(value: number): Promise<string>
+export function format_money_of_currency(value: number, currency_setting: string): string
 {
-    let currency_setting = await Config.the().get('currency')
-    const currency = CURRENCIES.get(currency_setting ?? 'SOL')
-
+    const currency = CURRENCIES.get(currency_setting)
     const display_value = Math.round(value * 100) / 100
+
     switch (currency.format_type)
     {
         case CurrencyFormatType.Prefix:
@@ -116,4 +116,10 @@ async function format_money(value: number): Promise<string>
         case CurrencyFormatType.Plural:
             return `${ display_value } ${ Math.abs(value) == 1 ? currency.symbol : currency.plural }`
     }
+}
+
+export async function format_money(value: number): Promise<string>
+{
+    let currency_setting = await Config.the().get('currency')
+    return await format_money_of_currency(value, currency_setting ?? 'SOL')
 }

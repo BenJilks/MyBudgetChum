@@ -1,5 +1,7 @@
+import { DataBase } from './database'
+import { Category, Place, Transaction } from './transaction'
 
-enum RepeatType
+export enum RepeatType
 {
     DAILY = 0,
     WEEKLY,
@@ -7,7 +9,7 @@ enum RepeatType
     YEARLY,
 }
 
-class RepeatTimer
+export class RepeatTimer
 {
 
     public readonly type: RepeatType
@@ -96,7 +98,7 @@ class RepeatTimer
 
 }
 
-class Repeat
+export class Repeat
 {
 
     private readonly id: any

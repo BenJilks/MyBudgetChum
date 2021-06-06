@@ -1,3 +1,4 @@
+import { Transaction, Group } from './transaction'
 
 enum ReportType
 {

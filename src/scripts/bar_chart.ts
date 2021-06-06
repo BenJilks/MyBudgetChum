@@ -1,5 +1,6 @@
+import { format_money } from './config'
 
-class BarChart
+export class BarChart
 {
 
     private bar_container: HTMLDivElement

@@ -1,5 +1,5 @@
 
-class DataBase
+export class DataBase
 {
 
     private static instance: DataBase = null
