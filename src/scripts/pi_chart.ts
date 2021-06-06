@@ -2,8 +2,6 @@
 class PiChart
 {
 
-    private static readonly COLORS = ['lightgreen', 'lightblue', 'white']
-
     private description: HTMLParagraphElement
     private ring_container: HTMLDivElement
 
@@ -13,7 +11,7 @@ class PiChart
         this.ring_container = container.querySelector('#ring-container')
     }
 
-    public set_data(data: Map<string, number>)
+    public set_data(data: Map<Group, number>)
     {
         this.ring_container.innerHTML = ''
 
@@ -28,7 +26,7 @@ class PiChart
             const percent = num / total
             const ring = document.createElement('div')
             const rotation = `rotateZ(${ last_rotation_offset * 360 }deg)`
-            const color = PiChart.COLORS[index]
+            const color = `0x${  category.color.toString(16) }`
             ring.className = 'ring'
             ring.style.clipPath = this.clip_path_for(percent)
             ring.style.transform = rotation
@@ -37,15 +35,16 @@ class PiChart
             ring.onmouseenter = async () =>
             {
                 ring.style.transform = rotation + ' scale(1.1)'
-                this.description.innerHTML = `${category}: ${ await format_money(num) } (${Math.round(percent * 100)}%)`
                 this.description.style.color = color
                 this.description.style.opacity = '1'
+                this.description.innerHTML = 
+                    `${category.name}: ${ await format_money(num) } (${Math.round(percent * 100)}%)`
             }
             ring.onmouseleave = () =>
             {
                 ring.style.transform = rotation
-                this.description.innerHTML = ''
                 this.description.style.opacity = '0'
+                this.description.innerHTML = ''
             }
 
             this.ring_container.appendChild(ring)

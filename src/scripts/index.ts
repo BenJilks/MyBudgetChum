@@ -3,8 +3,8 @@ window.onload = async () =>
 {
     try
     {
-        const food = await Category.new('food')
-        const coop = await Place.new('coop')
+        const food = await Category.new('food', 0xFF0000)
+        const coop = await Place.new('coop', 0x00FF00)
         await Repeat.new(2.50, food, coop, new RepeatTimer({ 'type': RepeatType.DAILY }))
     }
     catch

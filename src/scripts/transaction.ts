@@ -1,16 +1,24 @@
 
-class Category
+abstract class Group
 {
-    public readonly name: string
 
-    private constructor(name: string)
+    public readonly name: string
+    public readonly color: number
+
+    protected constructor(name: string, color: number)
     {
         this.name = name
+        this.color = color
     }
 
-    public static async new(name: string): Promise<Category>
+}
+
+class Category extends Group
+{
+
+    public static async new(name: string, color: number): Promise<Category>
     {
-        const category = new Category(name)
+        const category = new Category(name, color)
         await DataBase.the().insert('categories', category)
         return category
     }
@@ -19,20 +27,15 @@ class Category
     {
         return DataBase.the().get('categories')
     }
+
 }
 
-class Place
+class Place extends Group
 {
-    public readonly name: string
 
-    private constructor(name: string)
+    public static async new(name: string, color: number): Promise<Place>
     {
-        this.name = name
-    }
-
-    public static async new(name: string): Promise<Place>
-    {
-        const category = new Place(name)
+        const category = new Place(name, color)
         await DataBase.the().insert('places', category)
         return category
     }
@@ -41,6 +44,7 @@ class Place
     {
         return DataBase.the().get('places')
     }
+
 }
 
 class Transaction

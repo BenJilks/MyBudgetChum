@@ -101,8 +101,8 @@ const CURRENCIES: Map<string, Currency> = new Map(
 
 async function format_money(value: number): Promise<string>
 {
-    let currency_setting = (await Config.the().get('currency')) ?? 'SOL'
-    const currency = CURRENCIES.get(currency_setting)
+    let currency_setting = await Config.the().get('currency')
+    const currency = CURRENCIES.get(currency_setting ?? 'SOL')
 
     const display_value = Math.round(value * 100) / 100
     switch (currency.format_type)
