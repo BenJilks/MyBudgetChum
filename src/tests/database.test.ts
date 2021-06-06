@@ -1,6 +1,8 @@
 import { Category, Place, Transaction } from '../scripts/transaction'
+import { Config } from '../scripts/config'
 
 require("fake-indexeddb/auto")
+
 test('groups', async () =>
 {
     await Promise.all(
@@ -42,4 +44,17 @@ test('groups', async () =>
     const second = await Transaction.get_in_range(new Date(2001, 1, 2), new Date(2003, 1, 1))
     expect(second.length).toBe(1)
     expect(second[0].amount).toBe(-63)
+})
+
+test('config', async () =>
+{
+    await Promise.all(
+    [
+        Config.the().set('test', 'value'),
+        Config.the().set('wanna', 'spoons'),
+    ])
+    await Config.the().set('wanna', 'black horse')
+
+    expect(await Config.the().get('test')).toBe('value')
+    expect(await Config.the().get('wanna')).toBe('black horse')
 })

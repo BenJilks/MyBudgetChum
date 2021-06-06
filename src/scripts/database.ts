@@ -128,10 +128,10 @@ export class DataBase
             request => request.result)
     }
 
-    public update(table: string, key: IDBValidKey, item: object): Promise<void>
+    public update(table: string, item: object, key?: IDBValidKey): Promise<void>
     {
         return this.do_request(table, 'readwrite',
-            store => store.put(item, key), 
+            store => store.put(item, key),
             () => null)
     }
 
@@ -141,7 +141,7 @@ export class DataBase
         this.database.onerror = (event) =>
         {
             // TODO: Do something more sensible here
-            console.error(`Database error ${ (event.target as any).errorCode }`)
+            console.error(`Database error ${ event.target }`)
         }
 
         // Tell everyone that the database is ready to use

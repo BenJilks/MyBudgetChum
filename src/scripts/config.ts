@@ -1,6 +1,6 @@
 import { DataBase } from './database'
 
-class Config
+export class Config
 {
 
     private static instance: Config = null
@@ -45,14 +45,14 @@ class Config
     public async set(key: string, value: string): Promise<void>
     {
         await this.wait_for_load()
-        const is_new_value = !(key in this.settings.keys())
-        this.settings[key] = value
+        const is_new_value = !this.settings.has(key)
+        this.settings.set(key, value)
         
         const setting = { key: key, value: value }
         if (is_new_value)
             await DataBase.the().insert('config', setting)
         else
-            await DataBase.the().update('config', key, setting)
+            await DataBase.the().update('config', setting)
     }
 
     public static the(): Config

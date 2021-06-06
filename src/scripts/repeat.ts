@@ -142,7 +142,7 @@ export class Repeat
         }
 
         if (did_trigger)
-            await DataBase.the().update('repeat', this.id, this)
+            await DataBase.the().update('repeat', this, this.id)
 
         return did_trigger
     }
