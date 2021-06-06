@@ -25,10 +25,7 @@ export class DataBase
                     ? database.createObjectStore(table, { autoIncrement : true })
                     : database.createObjectStore(table, { keyPath: key })
 
-                store.transaction.oncomplete = () =>
-                {
-                    resolve(null)
-                }
+                store.transaction.oncomplete = () => resolve(null)
             })
         }
 
@@ -57,8 +54,7 @@ export class DataBase
         })
     }
 
-    private create_transaction(table: string, mode: IDBTransactionMode)
-        : Promise<IDBTransaction>
+    private wait_for_transaction(): Promise<() => void>
     {
         return new Promise(async (resolve) =>
         {
@@ -69,15 +65,20 @@ export class DataBase
                 this.is_transaction_in_progress = true
                 const on_transaction_done = () =>
                 {
-                    this.is_transaction_in_progress = false
-                    this.notify_when_transaction_is_done.forEach((resolve) => resolve())
-                    this.notify_when_transaction_is_done = []
+                    // Nobody is waiting, so just leave
+                    if (this.notify_when_transaction_is_done.length == 0)
+                    {
+                        this.is_transaction_in_progress = false
+                        return
+                    }
+
+                    // Notify the next person waiting that their ready to go
+                    const next = this.notify_when_transaction_is_done[this.notify_when_transaction_is_done.length - 1]
+                    this.notify_when_transaction_is_done.pop()
+                    next()
                 }
 
-                const transaction = this.database.transaction([table], mode)
-                transaction.onerror = (event: Event) => on_transaction_done()
-                transaction.oncomplete = () => on_transaction_done()
-                resolve(transaction)
+                resolve(on_transaction_done)
             }
 
             // NOTE: If there's no transaction in progress, we can just make one right now, 
@@ -89,13 +90,17 @@ export class DataBase
         })
     }
 
-    private do_request<T>(table: string, on_request: (IDBObjectStore) => IDBRequest, on_result: (IDBRequest) => T): Promise<T>
+    private do_request<T>(table: string, mode: IDBTransactionMode, 
+        on_request: (IDBObjectStore) => IDBRequest, on_result: (IDBRequest) => T): Promise<T>
     {
         return new Promise(async (resolve, reject) =>
         {
-            const transaction = await this.create_transaction(table, "readwrite")
-            const store_object = transaction.objectStore(table)
+            const on_done = await this.wait_for_transaction()
+            const transaction = this.database.transaction([table], mode)
+            transaction.onerror = (event: Event) => on_done()
+            transaction.oncomplete = () => on_done()
 
+            const store_object = transaction.objectStore(table)
             const request = on_request(store_object)
             request.onerror = () => reject()
             request.onsuccess = () => resolve(on_result(request))
@@ -104,28 +109,28 @@ export class DataBase
 
     public insert(table: string, item: object): Promise<any>
     {
-        return this.do_request(table, 
+        return this.do_request(table, 'readwrite',
             store => store.add(item), 
             request => request.result)
     }
 
     public get(table: string, query?: IDBValidKey | IDBKeyRange): Promise<any[]>
     {
-        return this.do_request(table, 
+        return this.do_request(table, 'readonly',
             store => store.getAll(query), 
             request => request.result)
     }
 
     public getKeys(table: string, query?: IDBValidKey | IDBKeyRange): Promise<any>
     {
-        return this.do_request(table, 
+        return this.do_request(table, 'readonly',
             store => store.getAllKeys(query), 
             request => request.result)
     }
 
     public update(table: string, key: IDBValidKey, item: object): Promise<void>
     {
-        return this.do_request(table, 
+        return this.do_request(table, 'readwrite',
             store => store.put(item, key), 
             () => null)
     }
@@ -136,7 +141,7 @@ export class DataBase
         this.database.onerror = (event) =>
         {
             // TODO: Do something more sensible here
-            console.log(`Database error ${ (event.target as any).errorCode }`)
+            console.error(`Database error ${ (event.target as any).errorCode }`)
         }
 
         // Tell everyone that the database is ready to use
@@ -156,7 +161,7 @@ export class DataBase
         if (!window.indexedDB) 
         {
             // TODO: Do something more sensible here
-            alert('IndexedDB not supported')
+            console.error('IndexedDB not supported')
             return
         }
 
@@ -164,7 +169,7 @@ export class DataBase
         request.onerror = () =>
         {
             // TODO: Do something more sensible here
-            alert(`Unable to connect to database ${ request.error }`)
+            console.error(`Unable to connect to database ${ request.error }`)
         }
         request.onsuccess = () => this.init_database(request.result)
         request.onupgradeneeded = (event) => this.create_new_database(event)
