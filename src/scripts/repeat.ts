@@ -19,14 +19,15 @@ export class RepeatTimer
     public readonly hour: number
     private next: number
 
-    public constructor(data: Partial<RepeatTimer>)
+    public constructor(data: Partial<RepeatTimer>, next?: Date)
     {
         this.month = 0
         this.month_day = 0
         this.week_day = 0
         this.hour = 0
-        this.next = Date.now()
+        this.next = next?.valueOf() ?? Date.now()
         Object.assign(this, data)
+        this.trigger()
     }
 
     private daily()
@@ -49,18 +50,21 @@ export class RepeatTimer
     private monthly()
     {
         let next = new Date(this.next)
-        next.setMonth(next.getMonth() + 1, this.month_day)
+        next.setMonth(next.getMonth() + 1)
+        next.setDate(this.month_day)
         next.setHours(this.hour)
         this.next = next.valueOf()
     }
-
+ 
     private yearly()
     {
-        let next = new Date(this.next)
-        next.setFullYear(next.getFullYear() + 1)
-        next.setMonth(this.month)
-        next.setDate(this.month_day)
-        next.setHours(this.hour)
+        const last = new Date(this.next)
+        let next = new Date(
+            last.getFullYear() + 1,
+            this.month,
+            this.month_day,
+            this.hour)
+
         this.next = next.valueOf()
     }
 
