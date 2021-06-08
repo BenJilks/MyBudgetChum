@@ -2,18 +2,14 @@ import typescript from 'rollup-plugin-typescript2'
 
 export default 
 {
-    input: 'src/scripts/index.ts',
+    input: 'src/scripts/transaction_view.ts',
     output: 
     [
         {
-            file: 'out/index.js',
+            dir: 'out',
             format: 'es',
             souremap: true,
         },
     ],
-    plugins:
-    [
-        typescript(),
-    ],
+    plugins: [ typescript() ],
 }
-
