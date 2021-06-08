@@ -1,56 +1,46 @@
 
-
-#test-charts
-    display: flex
-    flex-wrap: wrap
-
-    .pi-chart
-        padding: 50px
-        flex-basis: 40em
-        flex-grow: 1
-        min-width: 30em
-
-
 body
-  font-family: Arial, Helvetica, sans-serif
-  color: #c4cccd
+    font-family: Arial, Helvetica, sans-serif
+    color: #c4cccd
+    margin: 0
 
 .container
-  max-width: 480px
-  background-color: black
-  height: 800px
-  margin: auto
-
-.navbar
-  overflow: hidden
-  position: relative
-
-.logo
-  max-width: 90%
-  max-height: 100%
-
-.navbar
-  #navlinks
-    display: none
-
-  a
     background-color: black
-    color: #c4cccd
-    padding: 16px 18px
-    text-decoration: none
-    font-size: 16px
-    display: block
+    height: 800px
+    margin: auto
+    padding: 10px
 
-    &.icon
-      margin-top: 3%
-      background: black
-      display: block
-      position: absolute
-      right: 0
-      top: 0
+    #navbar
+        display: flex
+        align-items: center
 
-    &:hover
-      background-color: #22a05a
+        #logo
+            max-width: 600px
+            width: 90%
+
+        #icon
+            text-align: right
+            flex-grow: 1
+            color: white
+            font-size: 2em
+            padding: 0.2em
+
+    #navlinks
+        overflow: hidden
+        position: relative
+        display: none
+
+        a
+            width: 100%
+            display: block
+            background-color: black
+            color: #c4cccd
+            padding: 16px 18px
+            text-decoration: none
+            font-size: 16px
+
+            &:hover
+                background-color: #22a05a
 
 .bodyelement
-  padding-left: 16px
+    padding-left: 16px
