@@ -1,50 +1,48 @@
 <html>
-    <head>
-        <link rel="stylesheet" href="index.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        {{ header.html }}
-        <link rel="stylesheet" href="pi_chart.css">
-        <link rel="stylesheet" href="bar_chart.css">
-        <script src='index.js'></script>
-    </head>
-    <body>
-        {{ bar_chart.html id=bar-chart }}
-        <div class="container">
-         <div class="navbar">
-              <a href="#home"><img class="logo" src="../images/logotransparent.png"></a>
-         <div id="navlinks">
-             <a href="#pg1">Page 1</a>
-             <a href="#pg2">Page 2</a>
-             <a href="#pg3">Page 3</a>
-         </div>
-            <a href="javascript:void(0);" class="icon" onclick="showHideDropdown()">
-            <i class="fa fa-bars"></i>
-            </a>
-         </div>
-    
+  <head>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{ header.html }}
+    <link rel="stylesheet" href="pi_chart.css">
+    <link rel="stylesheet" href="bar_chart.css">
+    <script src='index.js'></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="navbar">
+        <a href="#home"><img class="logo" src="../images/logotransparent.png"></a>
+        <div id="navlinks">
+        <a href="#pg1">Page 1</a>
+        <a href="#pg2">Page 2</a>
+        <a href="#pg3">Page 3</a>
+      </div>
+        <a href="javascript:void(0);" class="icon" onclick="showHideDropdown()">
+        <i class="fa fa-bars"></i>
+      </a>
+    </div>
+
     <div class="bodyelement">
       <h3>Welcome to My Budget Chum</h3>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi lacus eros, vestibulum in ornare nec, egestas ac lectus. Vivamus eget nisl vitae tellus suscipit dictum vitae sed diam. Maecenas vulputate feugiat massa, ac ornare justo malesuada in. Praesent consequat, lectus vitae dignissim semper, erat mauris malesuada velit, id ornare tortor orci sed leo. Donec a malesuada nunc, dignissim feugiat magna. Integer interdum commodo efficitur. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Curabitur justo lorem, mollis vitae augue et, ultricies mattis ligula.</p>
     </div>
 
     <div class ="bodyelement" id="category-list"></div>
-        <div class="bodyelement">
-            <input id="category-input" />
-            <button onclick="add()">Add</button>
-        </div>
-    </body>
-    
+      <div class="bodyelement">
+        <input id="category-input" />
+        <button onclick="add()">Add</button>
+      </div>
     </div>
+  </body>
 
-    <script>
-        function showHideDropdown() {
-          var x = document.getElementById("navlinks");
-          if (x.style.display === "block") {
-            x.style.display = "none";
-          } else {
-            x.style.display = "block";
-          }
-        }
-    </script>
+  <script>
+    function showHideDropdown() {
+      var x = document.getElementById("navlinks");
+      if (x.style.display === "block") {
+        x.style.display = "none";
+      } else {
+        x.style.display = "block";
+      }
+    }
+  </script>
 </html>
