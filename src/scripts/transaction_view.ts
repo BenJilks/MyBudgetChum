@@ -71,7 +71,10 @@ window.onload = async () =>
         date.setDate(date.getDate() + 1)
     }
 
-    const now: Element = transaction_view.querySelector(
-        `[id='${ get_day_string(new Date(Date.now())) }']`)
-    now.scrollIntoView()
+    let now = new Date(Date.now())
+    now.setDate(now.getDate() - 3)
+
+    const now_div: Element = transaction_view.querySelector(
+        `[id='${ get_day_string(now) }']`)
+    now_div.scrollIntoView()
 }
