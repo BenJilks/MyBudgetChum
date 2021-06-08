@@ -1,0 +1,33 @@
+
+.transaction-list
+    padding: 1em
+
+    .day
+        position: relative
+        padding: 0em 1em
+        margin-bottom: 1em
+
+        &::before
+            content: ''
+            position: absolute
+            width: 100%
+            left: 0
+            top: 0
+            height: 0.1em
+            background-color: #bdbdbd
+
+        h1
+            padding: 0.4em 0em
+            margin: 0
+
+        #items
+            display: flex
+            flex-direction: column
+
+            div
+                display: flex
+                flex-direction: row
+                width: 100%
+                
+                #place
+                    flex-grow: 1

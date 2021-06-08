@@ -8,8 +8,8 @@ debug:
 	+"$(MAKE)" -C src/html
 
 watch:
-	npx rollup -c index.config.js -w
-	npx rollup -c transaction_view.config.js -w
+	npx rollup -c index.config.js -w &
+	npx rollup -c transaction_view.config.js -w &
 	+"$(MAKE)" -C src/styles watch &
 	+"$(MAKE)" -C src/html watch
 
