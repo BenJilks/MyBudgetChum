@@ -1,4 +1,4 @@
-import { format_money_of_currency } from '../scripts/config'
+import { format_money_of_currency } from '../scripts/lib/config'
 
 test('format money', () =>
 {

@@ -1,7 +1,7 @@
 
 SASS="../../node_modules/.bin/sass"
 OUT=../../out
-SOURCES = index.css transaction_view.css spending.css settings.css
+SOURCES = index.css transaction_view.css spending.css settings.css repeat.css
 FLAGS=
 
 %.css: %.sass

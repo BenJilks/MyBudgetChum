@@ -1,7 +1,7 @@
-import { MONTHS } from './config'
-import { PiChart } from './pi_chart'
-import { Group } from './transaction'
-import { ReportType, create_report } from './report'
+import { MONTHS } from './lib/config'
+import { PiChart } from './lib/pi_chart'
+import { Group } from './lib/transaction'
+import { ReportType, create_report } from './lib/report'
 
 let spending: PiChart
 let week_display: HTMLElement

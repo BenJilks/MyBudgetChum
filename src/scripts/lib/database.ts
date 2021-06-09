@@ -135,6 +135,13 @@ export class DataBase
             () => null)
     }
 
+    public remove(table: string, key: IDBValidKey): Promise<void>
+    {
+        return this.do_request(table, 'readwrite',
+            store => store.delete(key),
+            () => null)
+    }
+
     private init_database(database: IDBDatabase)
     {
         this.database = database

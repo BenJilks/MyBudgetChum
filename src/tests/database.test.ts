@@ -1,5 +1,5 @@
-import { Category, Place, Transaction } from '../scripts/transaction'
-import { Config } from '../scripts/config'
+import { Category, Place, Transaction } from '../scripts/lib/transaction'
+import { Config } from '../scripts/lib/config'
 
 require("fake-indexeddb/auto")
 

@@ -1,5 +1,5 @@
-import { Category, Place, Transaction } from './transaction'
-import { format_money, MONTHS, WEEK_DAYS } from './config'
+import { Category, Place, Transaction } from './lib/transaction'
+import { format_money, MONTHS, WEEK_DAYS } from './lib/config'
 
 let transaction_view: HTMLElement
 let year_display: HTMLElement

@@ -1,19 +1,43 @@
 @import config.sass
+@import index.sass
 
-.add-transaction
+.repeat-list
+    border-top: solid #DDD 1px
+
+    .repeat
+        display: flex
+        padding: 1em
+        border-bottom: solid #DDD 1px
+        align-items: center
+
+        #name
+            flex-basis: 100%
+
+        i
+            margin: 0em 0.4em
+            font-size: 1.5em
+            cursor: pointer
+
+.add-repeat-button
     position: fixed
-    display: none
-    left: 0px
-    top: 0px
+    bottom: 0
+    right: 0
+    font-size: 4em !important
+    margin: 0.2em
+    color: #22a05a
+    cursor: pointer
+
+.add-repeat
+    position: fixed
     width: 100%
+    top: $header-height
     z-index: 1
+    display: none
 
     background-color: $background-color
     border-bottom: solid white 1px
-    padding-top: $header-height + 1em
 
     h1
-        margin: 0 0 1em 0
         width: 100%
         text-align: center
 
@@ -24,9 +48,10 @@
 
         .name
             flex-grow: 1
-        .label
+        .input
             flex-grow: 0
-
+            width: 11em
+    
     .done-buttons
         display: flex
         flex-direction: row-reverse

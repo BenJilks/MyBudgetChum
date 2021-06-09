@@ -6,7 +6,7 @@ export const MONTHS = [
 ]
 
 export const WEEK_DAYS = [
-    'Sunday', 'Monday', 'Tuesday', 'Wednessday', 
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 
     'Thursday', 'Friday', 'Saturday',
 ]
 

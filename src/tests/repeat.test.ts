@@ -1,4 +1,4 @@
-import { RepeatTimer, RepeatType } from '../scripts/repeat'
+import { RepeatTimer, RepeatType } from '../scripts/lib/repeat'
 
 test('repeat', async () =>
 {

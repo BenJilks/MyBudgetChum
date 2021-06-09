@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="repeat.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{ header.html }}
+        <script src='repeat.js'></script>
+    </head>
+    <body>
+        {{ nav_bar.html }}
+
+        <div class="repeat-list" id="repeat-list"></div>
+        <i class="fa fa-plus-square add-repeat-button" aria-hidden="true" onclick="add_repeat()"></i>
+
+        <div class="add-repeat" id="add-repeat">
+            <h1>Add Repeat Transaction</h1>
+            <div class="field">
+                <text class="name">Name</text>
+                <input class="input" id="name-input" />
+            </div>
+            <div class="field">
+                <text class="name">Category</text>
+                <select class="input" id="category-input">
+                </select>
+            </div>
+            <div class="field">
+                <text class="name">Place</text>
+                <select class="input" id="place-input">
+                </select>
+            </div>
+            <div class="field">
+                <text class="name">Amount</text>
+                <input type="number" class="input" id="amount-input" />
+            </div>
+            <div class="field">
+                <text class="name">Period</text>
+                <select class="input" id="period-input" onchange="period_select()">
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                    <option>Monthly</option>
+                    <option>Yearly</option>
+                </select>
+            </div>
+            <div class="field" id="hour">
+                <text class="name">Hour</text>
+                <input type="number" value="1" class="input" id="hour-input" min="1" max="24"/>
+            </div>
+            <div class="field" style="display: none" id="month_day">
+                <text class="name">Day</text>
+                <input type="number" value="1" class="input" id="month-day-input" min="1" max="31"/>
+            </div>
+            <div class="field" style="display: none" id="week_day">
+                <text class="name">Day</text>
+                <select class="input" id="week-day-input">
+                    <option>Sunday</option>
+                    <option>Monday</option>
+                    <option>Tusday</option>
+                    <option>Wednesday</option>
+                    <option>Thursday</option>
+                    <option>Friday</option>
+                    <option>Saturday</option>
+                </select>
+            </div>
+            <div class="field" style="display: none" id="month">
+                <text class="name">Month</text>
+                <select class="input" id="month-input">
+                    <option>January</option>
+                    <option>February</option>
+                    <option>March</option>
+                    <option>April</option>
+                    <option>May</option>
+                    <option>June</option>
+                    <option>July</option>
+                    <option>August</option>
+                    <option>September</option>
+                    <option>October</option>
+                    <option>November</option>
+                    <option>December</option>
+                </select>
+            </div>
+
+            <div class="done-buttons">
+                <button onclick="add_repeat_cancel()">Cancel</button>
+                <button onclick="add_repeat_add()" id="add-button">Add</button>
+            </div>
+        </div>
+    </body>
+</html>

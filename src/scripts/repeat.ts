@@ -1,154 +1,206 @@
-import { DataBase } from './database'
-import { Category, Place, Transaction } from './transaction'
+import { WEEK_DAYS, MONTHS } from './lib/config'
+import { Category, Place, Transaction } from './lib/transaction'
+import { Repeat, RepeatTimer, RepeatType } from './lib/repeat'
+import { DataBase } from './lib/database'
 
-export enum RepeatType
+let add_repeat_div: HTMLElement
+let name_input: HTMLInputElement
+let category_input: HTMLSelectElement
+let place_input: HTMLSelectElement
+let amount_input: HTMLInputElement
+let period_input: HTMLSelectElement
+let hour_input: HTMLInputElement
+let month_day_input: HTMLInputElement
+let week_day_input: HTMLSelectElement
+let month_input: HTMLSelectElement
+
+let add_button: HTMLButtonElement
+let repeat_editing: number
+
+function create_repeat(repeat: Repeat): HTMLDivElement
 {
-    DAILY = 0,
-    WEEKLY,
-    MONTHLY,
-    YEARLY,
+    const repeat_div = document.createElement('div')
+    repeat_div.className = 'repeat'
+    repeat_div.innerHTML = `
+        <text id="name">${ repeat.name }</text>
+        <i class="fa fa-pencil" aria-hidden="true" onclick="edit(${ repeat.id })"></i>
+        <i class="fa fa-trash-o" aria-hidden="true" onclick="remove(${ repeat.id })"></i>
+    `
+
+    return repeat_div
 }
 
-export class RepeatTimer
+async function load_groups()
 {
-
-    public readonly type: RepeatType
-    public readonly month: number
-    public readonly month_day: number
-    public readonly week_day: number
-    public readonly hour: number
-    private next: number
-
-    public constructor(data: Partial<RepeatTimer>, next?: Date)
+    const categories = await Category.get_all()
+    categories.forEach(x => 
     {
-        this.month = 0
-        this.month_day = 0
-        this.week_day = 0
-        this.hour = 0
-        this.next = next?.valueOf() ?? Date.now()
-        Object.assign(this, data)
-        this.trigger()
-    }
+        const category = document.createElement('option')
+        category.innerHTML = x.name
+        category_input.appendChild(category)
+    })
 
-    private daily()
+    const places = await Place.get_all()
+    places.forEach(x => 
     {
-        let next = new Date(this.next)
-        next.setDate(next.getDate() + 1)
-        next.setHours(this.hour)
-        this.next = next.valueOf()
-    }
-
-    private weekly()
-    {
-        let next = new Date(this.next)
-        next.setDate(next.getDate() + 7)
-        next.setDate(next.getDate() - next.getDay() + this.week_day)
-        next.setHours(this.hour)
-        this.next = next.valueOf()
-    }
-
-    private monthly()
-    {
-        let next = new Date(this.next)
-        next.setMonth(next.getMonth() + 1)
-        next.setDate(this.month_day)
-        next.setHours(this.hour)
-        this.next = next.valueOf()
-    }
- 
-    private yearly()
-    {
-        const last = new Date(this.next)
-        let next = new Date(
-            last.getFullYear() + 1,
-            this.month,
-            this.month_day,
-            this.hour)
-
-        this.next = next.valueOf()
-    }
-
-    public has_been_met(): boolean
-    {
-        return Date.now() >= this.next
-    }
-
-    public get_next_date(): Date
-    {
-        return new Date(this.next)
-    }
-
-    public trigger()
-    {
-        switch (this.type)
-        {
-            case RepeatType.DAILY:
-                this.daily()
-                break
-
-            case RepeatType.WEEKLY:
-                this.weekly()
-                break
-
-            case RepeatType.MONTHLY:
-                this.monthly()
-                break
-
-            case RepeatType.YEARLY:
-                this.yearly()
-                break
-        }
-    }
-
+        const place = document.createElement('option')
+        place.innerHTML = x.name
+        place_input.appendChild(place)
+    })
 }
 
-export class Repeat
+async function load_repeat_list()
 {
+    const repeat_list = document.getElementById('repeat-list')
+    repeat_list.innerHTML = ''
 
-    private readonly id: any
-    public readonly amount: number
-    public readonly category: Category
-    public readonly place: Place
-    public readonly timer: RepeatTimer
-
-    private constructor(data: Partial<Repeat>)
+    const repeats = await Repeat.get_all()
+    repeats.forEach(x => 
     {
-        Object.assign(this, data)
+        const repeat_div = create_repeat(x)
+        repeat_list.appendChild(repeat_div)
+    })
+}
+
+window.onload = async () =>
+{
+    add_repeat_div = document.getElementById('add-repeat')
+    name_input = document.getElementById('name-input') as HTMLInputElement
+    category_input = document.getElementById('category-input') as HTMLSelectElement
+    place_input = document.getElementById('place-input') as HTMLSelectElement
+    amount_input = document.getElementById('amount-input') as HTMLInputElement
+    period_input = document.getElementById('period-input') as HTMLSelectElement
+    hour_input = document.getElementById('hour-input') as HTMLInputElement
+    month_day_input = document.getElementById('month-day-input') as HTMLInputElement
+    week_day_input = document.getElementById('week-day-input') as HTMLSelectElement
+    month_input = document.getElementById('month-input') as HTMLSelectElement
+
+    add_button = document.getElementById('add-button') as HTMLButtonElement
+
+    if (window == null)
+    {
+        period_select()
+        add_repeat()
+        add_repeat_cancel()
+        add_repeat_add()
+        remove(null)
+        edit(null)
     }
 
-    public static async new(amount: number, category: Category, place: Place, timer: RepeatTimer): Promise<Repeat>
+    load_groups()
+    load_repeat_list()
+}
+
+function period_select()
+{
+    switch (period_input.value)
     {
-        let partial = { 'amount': amount, 'category': category, 'place': place, 'timer': timer }
-        partial['id'] = await DataBase.the().insert('repeat', partial)
-        return new Repeat(partial)
-    }
+        case 'Daily':
+            document.getElementById('month_day').style.display = 'none'
+            document.getElementById('week_day').style.display = 'none'
+            document.getElementById('month').style.display = 'none'
+            break
 
-    public static async get_all(): Promise<Repeat[]>
+        case 'Weekly':
+            document.getElementById('month_day').style.display = 'none'
+            document.getElementById('week_day').style.display = 'flex'
+            document.getElementById('month').style.display = 'none'
+            break
+        
+        case 'Monthly':
+            document.getElementById('month_day').style.display = 'flex'
+            document.getElementById('week_day').style.display = 'none'
+            document.getElementById('month').style.display = 'none'
+            break
+    
+        case 'Yearly':
+            document.getElementById('month_day').style.display = 'flex'
+            document.getElementById('week_day').style.display = 'none'
+            document.getElementById('month').style.display = 'flex'
+            break
+    }
+}
+
+function add_repeat()
+{
+    add_button.innerHTML = 'Add'
+    add_repeat_div.style.display = 'block'
+}
+
+function add_repeat_cancel()
+{
+    add_repeat_div.style.display = 'none'
+}
+
+function period_to_repeat_type(period: string): RepeatType
+{
+    switch (period)
     {
-        const repeats = await DataBase.the().get('repeat')
-        const keys = await DataBase.the().getKeys('repeat')
-        return repeats.map((repeat: any, i) => 
-        {
-            repeat.id = keys[i]
-            repeat.timer = new RepeatTimer(repeat.timer)
-            return new Repeat(repeat)
-        })
+        case 'Daily': 
+            return RepeatType.DAILY
+        case 'Weekly': 
+            return RepeatType.WEEKLY
+        case 'Monthly': 
+            return RepeatType.MONTHLY
+        case 'Yearly': 
+            return RepeatType.YEARLY
     }
+}
 
-    public async trigger_if_timer_condition_is_met(): Promise<boolean>
-    {
-        let did_trigger = false
-        while (this.timer.has_been_met())
-        {
-            await Transaction.new(this.amount, this.category, this.place, this.timer.get_next_date())
-            this.timer.trigger()
-            did_trigger = true
-        }
+async function add_repeat_add()
+{
+    const name = name_input.value
+    const category = await Category.get(category_input.value)
+    const place = await Place.get(place_input.value)
+    const amount = parseInt(amount_input.value)
+    const period = period_to_repeat_type(period_input.value)
+    const hour = parseInt(hour_input.value)
+    const month_day = parseInt(month_day_input.value)
+    const week_day = WEEK_DAYS.indexOf(week_day_input.value)
+    const month = MONTHS.indexOf(month_input.value)
 
-        if (did_trigger)
-            await DataBase.the().update('repeat', this, this.id)
+    const timer = new RepeatTimer({ 
+        type: period, hour: hour, month_day: month_day, 
+        week_day: week_day, month: month 
+    });
 
-        return did_trigger
-    }
+    if (repeat_editing == null)
+        await Repeat.new(name, amount, category, place, timer)
+    else
+        await Repeat.update(repeat_editing, name, amount, category, place, timer)
+        
+    await load_repeat_list()
+    repeat_editing = null
+    add_repeat_div.style.display = 'none'
+}
 
+async function remove(id: number)
+{
+    await DataBase.the().remove('repeat', id)
+    await load_repeat_list()
+}
+
+function capatilise_first_letter(str: string): string
+{
+    let out = str.toLowerCase()
+    return out.charAt(0).toUpperCase() + out.substr(1)
+}
+
+async function edit(id: number)
+{
+    const repeat = await Repeat.get(id)
+    name_input.value = repeat.name
+    category_input.value = repeat.category.name
+    place_input.value = repeat.place.name
+    amount_input.value = repeat.amount.toString()
+    period_input.value = capatilise_first_letter(RepeatType[repeat.timer.type])
+    hour_input.value = repeat.timer.hour.toString()
+    month_day_input.value = repeat.timer.month_day.toString()
+    week_day_input.value = WEEK_DAYS[repeat.timer.week_day]
+    month_input.value = MONTHS[repeat.timer.month]
+    period_select()
+
+    repeat_editing = id
+    add_button.innerHTML = 'Save'
+    add_repeat_div.style.display = 'block'
 }
