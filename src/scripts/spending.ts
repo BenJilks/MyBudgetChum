@@ -26,7 +26,7 @@ async function load_week(date: Date)
 {
     const month = MONTHS[date.getMonth()]
     const week_num = Math.floor(date.getDate() / 7)
-    week_display.innerHTML = `${ month } Week ${ week_num }`
+    week_display.innerHTML = `${ month } Week ${ week_num + 1 }`
 
     const data = await report_for_week(date)
     spending.set_data(data)
@@ -43,6 +43,7 @@ window.onload = async () =>
     }
 
     current_week = new Date(Date.now())
+    current_week.setDate(current_week.getDate() - current_week.getDay())
     await load_week(current_week)
 }
 
