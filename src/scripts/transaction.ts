@@ -29,6 +29,11 @@ export class Category extends Group
         return DataBase.the().get('categories')
     }
 
+    public static async get(name: string): Promise<Category>
+    {
+        return (await DataBase.the().get('categories', name))[0]
+    }
+
 }
 
 export class Place extends Group
@@ -44,6 +49,11 @@ export class Place extends Group
     public static get_all(): Promise<Place[]>
     {
         return DataBase.the().get('places')
+    }
+
+    public static async get(name: string): Promise<Category>
+    {
+        return (await DataBase.the().get('places', name))[0]
     }
 
 }
