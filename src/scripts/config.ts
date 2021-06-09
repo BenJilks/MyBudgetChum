@@ -1,5 +1,15 @@
 import { DataBase } from './database'
 
+export const MONTHS = [
+    'January', 'February', 'March', 'April', 'May', 'June', 'July', 
+    'August', 'September', 'October', 'November', 'December',
+]
+
+export const WEEK_DAYS = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednessday', 
+    'Thursday', 'Friday', 'Saturday',
+]
+
 export class Config
 {
 

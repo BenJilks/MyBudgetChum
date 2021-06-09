@@ -1,18 +1,8 @@
 import { Transaction } from './transaction'
-import { format_money } from './config'
+import { format_money, MONTHS, WEEK_DAYS } from './config'
 
 let transaction_view: HTMLElement
 let year_display: HTMLElement
-
-const MONTHS = [
-    'January', 'February', 'March', 'April', 'May', 'June', 'July', 
-    'August', 'September', 'October', 'November', 'December',
-]
-
-const WEEK_DAYS = [
-    'Sunday', 'Monday', 'Tuesday', 'Wednessday', 
-    'Thursday', 'Friday', 'Saturday',
-]
 
 function ordinal(x: number): string
 {
