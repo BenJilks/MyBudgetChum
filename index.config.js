@@ -6,9 +6,9 @@ export default
     output: 
     [
         {
-            dir: 'out',
+            file: 'out/index.js',
             format: 'es',
-            souremap: true,
+            sourcemap: true,
         },
     ],
     plugins: [ typescript() ],

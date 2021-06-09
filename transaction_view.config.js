@@ -6,9 +6,9 @@ export default
     output: 
     [
         {
-            dir: 'out',
+            file: 'out/transaction_view.js',
             format: 'es',
-            souremap: true,
+            sourcemap: true,
         },
     ],
     plugins: [ typescript() ],
