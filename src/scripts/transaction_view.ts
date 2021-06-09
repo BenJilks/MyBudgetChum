@@ -6,7 +6,12 @@ let year_display: HTMLElement
 
 const MONTHS = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 
-    'August', 'September', 'October', 'November', 'December'
+    'August', 'September', 'October', 'November', 'December',
+]
+
+const WEEK_DAYS = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednessday', 
+    'Thursday', 'Friday', 'Saturday',
 ]
 
 function ordinal(x: number): string
@@ -26,9 +31,16 @@ function ordinal(x: number): string
     }
 }
 
+function absolute_day_id(day: Date)
+{
+    return Math.floor(day.valueOf() / (1000 * 60 * 60 * 24)) - 3
+}
+
 function get_day_string(day: Date): string
 {
-    return `${ ordinal(day.getDate()) } ${ MONTHS[day.getMonth()] }`
+    const week_day = WEEK_DAYS[day.getDay()]
+    const date = ordinal(day.getDate())
+    return `${ week_day } the ${ date }`
 }
 
 async function create_day(day: Date, transactions: Transaction[]): Promise<HTMLDivElement>
@@ -51,7 +63,7 @@ async function create_day(day: Date, transactions: Transaction[]): Promise<HTMLD
 
         const item = document.createElement('div')
         item.innerHTML = `
-            <text id="place">${ transaction.place.name }</text>
+            <text id="place">${ transaction.place.name } (${ transaction.category.name })</text>
             <text id="amount">${ await format_future }</text>
         `
         items.appendChild(item)
@@ -60,6 +72,34 @@ async function create_day(day: Date, transactions: Transaction[]): Promise<HTMLD
     if (futures.length > 0)
         await Promise.all(futures)
     return day_div
+}
+
+async function create_week(start: Date, transactions: Transaction[]): Promise<HTMLDivElement>
+{
+    const month = MONTHS[start.getMonth()]
+    const week_num = Math.floor(start.getDate() / 7)
+    const week_div = document.createElement('div')
+    week_div.id = Math.floor(absolute_day_id(start) / 7).toString()
+    week_div.className = 'week'
+    week_div.innerHTML = `
+        <h1>${ month } Week ${ week_num + 1 }</h1>
+        <div id="day-container"></div>
+        <text>total: {{ num }}</text>
+        <text>budget left: {{ num }}</text>
+    `
+
+    const day_container = week_div.querySelector('#day-container')
+    for (let i = 0; i < 7 - start.getDay(); i++)
+    {
+        const day = new Date(start.valueOf())
+        day.setDate(start.getDate() + i)
+
+        const day_transactions = transactions_in_day(transactions, day)
+        const day_div = await create_day(day, day_transactions)
+        day_container.appendChild(day_div)
+    }
+
+    return week_div
 }
 
 function transactions_in_year(start: Date): Promise<Transaction[]>
@@ -88,11 +128,13 @@ async function load_year(year: number)
     date.setMonth(0, 1)
 
     const transactions = await transactions_in_year(date)
-    for (let i = 0; i < 365; i++)
+    let day_in_year = 0
+    while (day_in_year < 364 + 7)
     {
-        const day_transactions = transactions_in_day(transactions, date)
-        temp_transaction_container.appendChild(await create_day(date, day_transactions))
-        date.setDate(date.getDate() + 1)
+        const week_div = await create_week(date, transactions)
+        temp_transaction_container.appendChild(week_div)
+        date.setDate(date.getDate() + 7 - date.getDay())
+        day_in_year += 7 - date.getDay()
     }
 
     transaction_view.innerHTML = temp_transaction_container.innerHTML
@@ -100,11 +142,9 @@ async function load_year(year: number)
 
 function scroll_to_now()
 {
-    let now = new Date(Date.now())
-    now.setDate(now.getDate() - 3)
-
+    let now = Math.floor(absolute_day_id(new Date(Date.now())) / 7)
     const now_div: Element = transaction_view.querySelector(
-        `[id='${ get_day_string(now) }']`)
+        `[id='${ now }']`)
     now_div.scrollIntoView()
 }
 
