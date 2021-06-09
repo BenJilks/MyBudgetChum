@@ -11,6 +11,12 @@
   <body>
     {{ nav_bar.html }}
 
+    <div class="year">
+      <i class="fa fa-angle-double-left" onclick="back_a_year()"></i>
+      <text id="year-display">2021</text>
+      <i class="fa fa-angle-double-right" onclick="forward_a_year()"></i>
+    </div>
+
     <div class="transaction-list" id="transaction-view">
     </div>
   </body>
