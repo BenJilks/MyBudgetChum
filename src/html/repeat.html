@@ -1,18 +1,16 @@
 <html>
     <head>
+        {{ templates/header.html }}
         <link rel="stylesheet" href="repeat.css">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        {{ header.html }}
         <script src='repeat.js'></script>
     </head>
     <body>
-        {{ nav_bar.html }}
+        {{ templates/nav_bar.html }}
 
         <div class="repeat-list" id="repeat-list"></div>
-        <i class="fa fa-plus-square add-repeat-button" aria-hidden="true" onclick="add_repeat()"></i>
+        <i class="fa fa-plus-square add-repeat-button" aria-hidden="true" id="add-repeat"></i>
 
-        <div class="add-repeat" id="add-repeat">
+        <div class="add-repeat" id="add-repeat-div">
             <h1>Add Repeat Transaction</h1>
             <div class="field">
                 <text class="name">Name</text>
@@ -34,7 +32,7 @@
             </div>
             <div class="field">
                 <text class="name">Period</text>
-                <select class="input" id="period-input" onchange="period_select()">
+                <select class="input" id="period-input">
                     <option>Daily</option>
                     <option>Weekly</option>
                     <option>Monthly</option>
@@ -80,8 +78,8 @@
             </div>
 
             <div class="done-buttons">
-                <button onclick="add_repeat_cancel()">Cancel</button>
-                <button onclick="add_repeat_add()" id="add-button">Add</button>
+                <button id="add-repeat-cancel">Cancel</button>
+                <button id="add-repeat-add">Add</button>
             </div>
         </div>
     </body>

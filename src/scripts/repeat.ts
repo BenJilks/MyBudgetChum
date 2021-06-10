@@ -2,19 +2,8 @@ import { WEEK_DAYS, MONTHS } from './lib/config'
 import { Category, Place, Transaction } from './lib/transaction'
 import { Repeat, RepeatTimer, RepeatType } from './lib/repeat'
 import { DataBase } from './lib/database'
+import { $ } from './lib/util'
 
-let add_repeat_div: HTMLElement
-let name_input: HTMLInputElement
-let category_input: HTMLSelectElement
-let place_input: HTMLSelectElement
-let amount_input: HTMLInputElement
-let period_input: HTMLSelectElement
-let hour_input: HTMLInputElement
-let month_day_input: HTMLInputElement
-let week_day_input: HTMLSelectElement
-let month_input: HTMLSelectElement
-
-let add_button: HTMLButtonElement
 let repeat_editing: number
 
 function create_repeat(repeat: Repeat): HTMLDivElement
@@ -23,10 +12,12 @@ function create_repeat(repeat: Repeat): HTMLDivElement
     repeat_div.className = 'repeat'
     repeat_div.innerHTML = `
         <text id="name">${ repeat.name }</text>
-        <i class="fa fa-pencil" aria-hidden="true" onclick="edit(${ repeat.id })"></i>
-        <i class="fa fa-trash-o" aria-hidden="true" onclick="remove(${ repeat.id })"></i>
+        <i class="fa fa-pencil" aria-hidden="true" id="edit"></i>
+        <i class="fa fa-trash-o" aria-hidden="true" id="remove"></i>
     `
 
+    repeat_div.querySelector<HTMLElement>('#edit').onclick = () => edit(repeat.id)
+    repeat_div.querySelector<HTMLElement>('#remove').onclick = () => remove(repeat.id)
     return repeat_div
 }
 
@@ -37,7 +28,7 @@ async function load_groups()
     {
         const category = document.createElement('option')
         category.innerHTML = x.name
-        category_input.appendChild(category)
+        $('#category-input').appendChild(category)
     })
 
     const places = await Place.get_all()
@@ -45,7 +36,7 @@ async function load_groups()
     {
         const place = document.createElement('option')
         place.innerHTML = x.name
-        place_input.appendChild(place)
+        $('#place-input').appendChild(place)
     })
 }
 
@@ -64,28 +55,10 @@ async function load_repeat_list()
 
 window.onload = async () =>
 {
-    add_repeat_div = document.getElementById('add-repeat')
-    name_input = document.getElementById('name-input') as HTMLInputElement
-    category_input = document.getElementById('category-input') as HTMLSelectElement
-    place_input = document.getElementById('place-input') as HTMLSelectElement
-    amount_input = document.getElementById('amount-input') as HTMLInputElement
-    period_input = document.getElementById('period-input') as HTMLSelectElement
-    hour_input = document.getElementById('hour-input') as HTMLInputElement
-    month_day_input = document.getElementById('month-day-input') as HTMLInputElement
-    week_day_input = document.getElementById('week-day-input') as HTMLSelectElement
-    month_input = document.getElementById('month-input') as HTMLSelectElement
-
-    add_button = document.getElementById('add-button') as HTMLButtonElement
-
-    if (window == null)
-    {
-        period_select()
-        add_repeat()
-        add_repeat_cancel()
-        add_repeat_add()
-        remove(null)
-        edit(null)
-    }
+    $('#period-input').onchange = period_select
+    $('#add-repeat').onclick = add_repeat
+    $('#add-repeat-cancel').onclick = add_repeat_cancel
+    $('#add-repeat-add').onclick = add_repeat_add
 
     load_groups()
     load_repeat_list()
@@ -93,43 +66,43 @@ window.onload = async () =>
 
 function period_select()
 {
-    switch (period_input.value)
+    switch ($('#period-input').value)
     {
         case 'Daily':
-            document.getElementById('month_day').style.display = 'none'
-            document.getElementById('week_day').style.display = 'none'
-            document.getElementById('month').style.display = 'none'
+            $('#month_day').style.display = 'none'
+            $('#week_day').style.display = 'none'
+            $('#month').style.display = 'none'
             break
 
         case 'Weekly':
-            document.getElementById('month_day').style.display = 'none'
-            document.getElementById('week_day').style.display = 'flex'
-            document.getElementById('month').style.display = 'none'
+            $('#month_day').style.display = 'none'
+            $('#week_day').style.display = 'flex'
+            $('#month').style.display = 'none'
             break
         
         case 'Monthly':
-            document.getElementById('month_day').style.display = 'flex'
-            document.getElementById('week_day').style.display = 'none'
-            document.getElementById('month').style.display = 'none'
+            $('#month_day').style.display = 'flex'
+            $('#week_day').style.display = 'none'
+            $('#month').style.display = 'none'
             break
     
         case 'Yearly':
-            document.getElementById('month_day').style.display = 'flex'
-            document.getElementById('week_day').style.display = 'none'
-            document.getElementById('month').style.display = 'flex'
+            $('#month_day').style.display = 'flex'
+            $('#week_day').style.display = 'none'
+            $('#month').style.display = 'flex'
             break
     }
 }
 
 function add_repeat()
 {
-    add_button.innerHTML = 'Add'
-    add_repeat_div.style.display = 'block'
+    $('#add-repeat-add').innerHTML = 'Add'
+    $('#add-repeat-div').style.display = 'block'
 }
 
 function add_repeat_cancel()
 {
-    add_repeat_div.style.display = 'none'
+    $('#add-repeat-div').style.display = 'none'
 }
 
 function period_to_repeat_type(period: string): RepeatType
@@ -149,15 +122,15 @@ function period_to_repeat_type(period: string): RepeatType
 
 async function add_repeat_add()
 {
-    const name = name_input.value
-    const category = await Category.get(category_input.value)
-    const place = await Place.get(place_input.value)
-    const amount = parseInt(amount_input.value)
-    const period = period_to_repeat_type(period_input.value)
-    const hour = parseInt(hour_input.value)
-    const month_day = parseInt(month_day_input.value)
-    const week_day = WEEK_DAYS.indexOf(week_day_input.value)
-    const month = MONTHS.indexOf(month_input.value)
+    const name = $('#name-input').value
+    const category = await Category.get($('#category-input').value)
+    const place = await Place.get($('#place-input').value)
+    const amount = parseInt($('#amount-input').value)
+    const period = period_to_repeat_type($('#period-input').value)
+    const hour = parseInt($('#hour-input').value)
+    const month_day = parseInt($('#month-day-input').value)
+    const week_day = WEEK_DAYS.indexOf($('#week-day-input').value)
+    const month = MONTHS.indexOf($('#month-input').value)
 
     const timer = new RepeatTimer({ 
         type: period, hour: hour, month_day: month_day, 
@@ -171,7 +144,7 @@ async function add_repeat_add()
         
     await load_repeat_list()
     repeat_editing = null
-    add_repeat_div.style.display = 'none'
+    $('#add-repeat-div').style.display = 'none'
 }
 
 async function remove(id: number)
@@ -189,18 +162,18 @@ function capatilise_first_letter(str: string): string
 async function edit(id: number)
 {
     const repeat = await Repeat.get(id)
-    name_input.value = repeat.name
-    category_input.value = repeat.category.name
-    place_input.value = repeat.place.name
-    amount_input.value = repeat.amount.toString()
-    period_input.value = capatilise_first_letter(RepeatType[repeat.timer.type])
-    hour_input.value = repeat.timer.hour.toString()
-    month_day_input.value = repeat.timer.month_day.toString()
-    week_day_input.value = WEEK_DAYS[repeat.timer.week_day]
-    month_input.value = MONTHS[repeat.timer.month]
+    $('#name-input').value = repeat.name
+    $('#category-input').value = repeat.category.name
+    $('#place-input').value = repeat.place.name
+    $('#amount-input').value = repeat.amount.toString()
+    $('#period-input').value = capatilise_first_letter(RepeatType[repeat.timer.type])
+    $('#hour-input').value = repeat.timer.hour.toString()
+    $('#month-day-input').value = repeat.timer.month_day.toString()
+    $('#week-day-input').value = WEEK_DAYS[repeat.timer.week_day]
+    $('#month-input').value = MONTHS[repeat.timer.month]
     period_select()
 
     repeat_editing = id
-    add_button.innerHTML = 'Save'
-    add_repeat_div.style.display = 'block'
+    $('#add-repeat-add').innerHTML = 'Save'
+    $('#add-repeat-div').style.display = 'block'
 }

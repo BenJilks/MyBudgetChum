@@ -1,26 +1,24 @@
 <html>
   <head>
+    {{ templates/header.html }}
     <link rel="stylesheet" href="transaction_view.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{ header.html }}
     <script src='transaction_view.js'></script>
   </head>
   <body>
-    {{ nav_bar.html }}
+    {{ templates/nav_bar.html }}
 
     <div class="year">
-      <i class="fa fa-angle-double-left" onclick="back_a_year()"></i>
+      <i class="fa fa-angle-double-left" id="back-a-year"></i>
       <div id="center">
         <text id="year-display">2021</text>
-        <i class="fa fa-plus-circle" onclick="add_transaction()"></i>
+        <i class="fa fa-plus-circle" id="add-transaction"></i>
       </div>
-      <i class="fa fa-angle-double-right" onclick="forward_a_year()"></i>
+      <i class="fa fa-angle-double-right" id="forward-a-year"></i>
     </div>
 
     <div class="transaction-list" id="transaction-view">
     </div>
 
-    {{ add_transaction.html }}
+    {{ templates/add_transaction.html }}
   </body>
 </html>

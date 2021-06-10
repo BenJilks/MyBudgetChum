@@ -1,20 +1,18 @@
 <html>
   <head>
+    {{ templates/header.html }}
     <link rel="stylesheet" href="spending.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{ header.html }}
     <script src='spending.js'></script>
   </head>
   <body>
-    {{ nav_bar.html }}
+    {{ templates/nav_bar.html }}
 
     <div class="week">
-        <i class="fa fa-angle-double-left" onclick="back_a_week()"></i>
+        <i class="fa fa-angle-double-left" id="back-a-week"></i>
         <text id="week-display">June Week 1</text>
-        <i class="fa fa-angle-double-right" onclick="forward_a_week()"></i>
+        <i class="fa fa-angle-double-right" id="forward-a-week"></i>
     </div>
   
-    {{ pi_chart.html id=spending }}
+    {{ templates/pi_chart.html id=spending }}
   </body>
 </html>

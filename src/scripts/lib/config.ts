@@ -35,20 +35,21 @@ export class Config
         this.notify_on_load.forEach(resolve => resolve())
     }
 
-    private wait_for_load(): Promise<Config>
+    private wait_for_load(): Promise<void>
     {
         return new Promise(resolve =>
         {
             if (!this.has_loaded)
-                this.notify_on_load.push(() => resolve(this))
+                this.notify_on_load.push(() => resolve(null))
             else
-                resolve(this)
+                resolve(null)
         })
     }
 
     public async get(key: string): Promise<string>
     {
         await this.wait_for_load()
+        console.log(this.settings)
         return this.settings.get(key)
     }
 
@@ -101,7 +102,7 @@ function make_currency(full_name: string, symbol: string,
     }
 }
 
-const CURRENCIES: Map<string, Currency> = new Map(
+export const CURRENCIES: Map<string, Currency> = new Map(
 [
     ['GBP', make_currency('Pound Sterling', '£', CurrencyFormatType.Prefix)],
     ['USD', make_currency('United States Doller', '$', CurrencyFormatType.Suffix)],

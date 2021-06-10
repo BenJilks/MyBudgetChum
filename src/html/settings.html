@@ -1,41 +1,35 @@
 <html>
   <head>
+    {{ templates/header.html }}
     <link rel="stylesheet" href="settings.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{ header.html }}
     <script src='settings.js'></script>
   </head>
   <body>
-    {{ nav_bar.html }}
+    {{ templates/nav_bar.html }}
 
-    <h4 class="bodyelement">Set Budget</h4>
     <div class="settingscontainer">
-        <p id="budgettxt">£</p>
-        <input type="text" id="budget" name="budget" value="0.00">
+      <h4 class="bodyelement">Set Budget</h4>
+      <div class="field">
+          <p id="budgettxt">£</p>
+          <input type="text" id="budget" name="budget" value="0.00">
+      </div>
+
+      <div class="field">
+          <input type="radio" id="weekly" name="weekly" value="weekly">
+          <label for="weekly">Weekly</label>
+          <input type="radio" id="monthly" name="monthly" value="monthly">
+          <label for="monthly">Monthly</label>
+      </div>
+
+      <button class="submitbtn">Submit</button>
+
+      <h4 class="bodyelement">Select Currency Symbol</h4>
+      <select name="currency" id="currency">
+      </select>
+
+      <h4 class="bodyelement">Other Settings</h4>
+      <button class="submitbtn">Button 1</button>
+      <button class="submitbtn">Button 2</button>
     </div>
-
-    <div class="settingscontainer">
-        <input type="radio" id="weekly" name="weekly" value="weekly">
-        <label for="weekly">Weekly</label>
-        <input type="radio" id="monthly" name="monthly" value="monthly">
-        <label for="monthly">Monthly</label>
-    </div>
-
-    <button class="submitbtn">Submit</button><br><br><br>
-
-    <h4 class="bodyelement">Select Currency Symbol</h4>
-    <div class="settingscontainer">
-        <select name="currency" id="currency">
-            <option value="gbp">£ (GBP)</option>
-            <option value="usd">$ (USD)</option>
-        </select>
-    </div><br><br><br>
-
-    <h4 class="bodyelement">Other Settings</h4>
-    <button class="submitbtn">Button 1</button><br>
-    <button class="submitbtn">Button 2</button><br>
-
-    
   </body>
 </html>
