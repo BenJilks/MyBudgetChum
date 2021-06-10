@@ -1,8 +1,8 @@
-import { WEEK_DAYS, MONTHS } from './lib/config'
-import { Category, Place, Transaction } from './lib/transaction'
-import { Repeat, RepeatTimer, RepeatType } from './lib/repeat'
-import { DataBase } from './lib/database'
-import { $ } from './lib/util'
+import {MONTHS, WEEK_DAYS} from './lib/config'
+import {Category, Place} from './lib/transaction'
+import {Repeat, RepeatTimer, RepeatType} from './lib/repeat'
+import {DataBase} from './lib/database'
+import {$} from './lib/util'
 
 let repeat_editing: number
 
@@ -122,6 +122,7 @@ function period_to_repeat_type(period: string): RepeatType
 
 async function add_repeat_add()
 {
+    let success = false
     const name = $('#name-input').value
     const category = await Category.get($('#category-input').value)
     const place = await Place.get($('#place-input').value)
@@ -136,15 +137,32 @@ async function add_repeat_add()
         type: period, hour: hour, month_day: month_day, 
         week_day: week_day, month: month 
     });
+    if ((name.length != 0)&&(category != null)&&(place != null)&&(!isNaN(amount))&&(period != null)&&(!isNaN(hour))) {
+        if (repeat_editing == null) {
+            if ((RepeatType.MONTHLY)||(RepeatType.YEARLY)) {
+                if (!isNaN(month_day)) {
+                    await Repeat.new(name, amount, category, place, timer)
+                   success = true
+                }
+            }
+            else {
+                await Repeat.new(name, amount, category, place, timer)
+                success = true
+            }
+        }
+        else
+            {
+                await Repeat.update(repeat_editing, name, amount, category, place, timer)
+                success = true
+            }
 
-    if (repeat_editing == null)
-        await Repeat.new(name, amount, category, place, timer)
-    else
-        await Repeat.update(repeat_editing, name, amount, category, place, timer)
-        
-    await load_repeat_list()
-    repeat_editing = null
-    $('#add-repeat-div').style.display = 'none'
+        }
+    if (success) {
+        await load_repeat_list()
+        repeat_editing = null
+        $('#add-repeat-div').style.display = 'none'
+        success = false
+    }
 }
 
 async function remove(id: number)
