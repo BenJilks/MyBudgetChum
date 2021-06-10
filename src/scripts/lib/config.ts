@@ -104,7 +104,7 @@ function make_currency(full_name: string, symbol: string,
 export const CURRENCIES: Map<string, Currency> = new Map(
 [
     ['GBP', make_currency('Pound Sterling', '£', CurrencyFormatType.Prefix)],
-    ['USD', make_currency('United States Doller', '$', CurrencyFormatType.Suffix)],
+    ['USD', make_currency('United States Dollar', '$', CurrencyFormatType.Suffix)],
     ['EUR', make_currency('Euro', '€', CurrencyFormatType.Suffix)],
     ['SOL', make_currency('Peruvian Sol', 'sol', CurrencyFormatType.Plural, 'soles')],
     ['BTC', make_currency('Bitcoin', '₿', CurrencyFormatType.Prefix)],

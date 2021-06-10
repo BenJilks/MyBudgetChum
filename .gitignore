@@ -2,3 +2,8 @@ node_modules/
 out/
 package-lock.json
 
+*.log
+.vscode/settings.json
+.idea/vcs.xml
+.idea/modules.xml
+.idea/MyBudgetingChum.iml
