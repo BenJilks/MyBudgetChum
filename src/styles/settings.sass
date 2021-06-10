@@ -1,13 +1,14 @@
 @import lib/config.sass
 @import lib/nav_bar.sass
+@import lib/input_field.sass
 
 .settingscontainer
     display: flex
     flex-direction: column
     align-items: center
 
-    .field
-        text-align: center
+    h4
+        margin-top: 2em
 
     #budgettxt
         display: inline-block
@@ -38,3 +39,56 @@
     #currency
         width: 62%
         margin: 0.5em
+
+.setting-field
+    text-align: center
+
+.group-header
+    display: flex
+    align-items: center
+    width: 70%
+    margin-top: 1em
+
+    h4
+        display: inline-block
+        flex-grow: 1
+    
+    i
+        font-size: 1.5em
+        cursor: pointer
+
+.group-list
+    width: 70%
+    min-height: 2em
+    border: solid $forground-color 1px
+
+    .group
+        display: flex
+        align-items: center
+        margin: 2em
+
+        #name
+            flex-grow: 1
+        
+        #color-preview
+            width: 1.5em
+            height: 1.5em
+            margin-right: 1em
+        
+        i
+            font-size: 1.5em
+            cursor: pointer
+
+.add-group
+    position: fixed
+    width: 100%
+    top: $header-height
+    z-index: 1
+    display: none
+
+    background-color: $background-color
+    border-bottom: solid white 1px
+
+    h1
+        width: 100%
+        text-align: center

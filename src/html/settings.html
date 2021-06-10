@@ -1,35 +1,59 @@
 <html>
-  <head>
-    {{ templates/header.html }}
-    <link rel="stylesheet" href="settings.css">
-    <script src='settings.js'></script>
-  </head>
-  <body>
-    {{ templates/nav_bar.html }}
+    <head>
+        {{ templates/header.html }}
+        <link rel="stylesheet" href="settings.css">
+        <script src='settings.js'></script>
+    </head>
+    <body>
+        {{ templates/nav_bar.html }}
 
-    <div class="settingscontainer">
-      <h4 class="bodyelement">Set Budget</h4>
-      <div class="field">
-          <p id="budgettxt">£</p>
-          <input type="text" id="budget" name="budget" value="0.00">
-      </div>
+        <div class="settingscontainer">
+            <h4>Set Budget</h4>
+            <div class="setting-field">
+                <p id="budgettxt">£</p>
+                <input type="text" id="budget" name="budget" value="0.00">
+            </div>
 
-      <div class="field">
-          <input type="radio" id="weekly" name="weekly" value="weekly">
-          <label for="weekly">Weekly</label>
-          <input type="radio" id="monthly" name="monthly" value="monthly">
-          <label for="monthly">Monthly</label>
-      </div>
+            <div class="setting-field">
+                <input type="radio" id="weekly" name="period" value="weekly">
+                <label for="weekly">Weekly</label>
+                <input type="radio" id="monthly" name="period" value="monthly">
+                <label for="monthly">Monthly</label>
+            </div>
 
-      <button class="submitbtn">Submit</button>
+            <br>
+            <br>
 
-      <h4 class="bodyelement">Select Currency Symbol</h4>
-      <select name="currency" id="currency">
-      </select>
+            <h4>Select Currency Symbol</h4>
+            <select name="currency" id="currency"></select>
 
-      <h4 class="bodyelement">Other Settings</h4>
-      <button class="submitbtn">Button 1</button>
-      <button class="submitbtn">Button 2</button>
-    </div>
-  </body>
+            <div class="group-header">
+                <h4>Categories</h4>
+                <i class="fa fa-plus-square" aria-hidden="true" id="add-category"></i>
+            </div>
+            <div class="group-list" id="category-list"></div>
+
+            <div class="group-header">
+                <h4>Places</h4>
+                <i class="fa fa-plus-square" aria-hidden="true" id="add-place"></i>
+            </div>
+            <div class="group-list" id="place-list"></div>
+        </div>
+
+        <div class="add-group" id="add-group-div">
+            <h1 id="add-group-title">Add Group</h1>
+            <div class="field">
+                <text class="name">Name</text>
+                <input class="input" id="name-input" />
+            </div>
+            <div class="field">
+                <text class="name">Color</text>
+                <input type="color" class="input" id="color-input" />
+            </div>
+            <div class="done-buttons">
+                <button id="add-group-cancel">Cancel</button>
+                <button id="add-group-add">Add</button>
+            </div>
+        </div>
+    </body>
 </html>

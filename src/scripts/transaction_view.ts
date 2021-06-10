@@ -36,7 +36,7 @@ async function create_day(day: Date, transactions: Transaction[]): Promise<HTMLD
     const day_string = get_day_string(day)
     const day_div = document.createElement('div')
     day_div.className = 'day'
-    day_div.id = day_string
+    day_div.id = absolute_day_id(day).toString()
     day_div.innerHTML = `
         <h1>${ day_string }</h1>
         <div id="items"></div>
@@ -76,7 +76,6 @@ async function create_week(start: Date, transactions: Transaction[]): Promise<HT
     const month = MONTHS[start.getMonth()]
     const week_num = Math.floor(start.getDate() / 7)
     const week_div = document.createElement('div')
-    week_div.id = Math.floor(absolute_day_id(start) / 7).toString()
     week_div.className = 'week'
     week_div.innerHTML = `
         <h1>${ month } Week ${ week_num + 1 }</h1>
@@ -131,9 +130,11 @@ async function load_year(year: number)
 
 function scroll_to_now()
 {
-    let now = Math.floor(absolute_day_id(new Date(Date.now())) / 7)
-    const now_div: Element = $('#transaction-view').querySelector(
-        `[id='${ now }']`)
+    let day = new Date(Date.now())
+    day.setDate(day.getDate() - 7)
+
+    let id = absolute_day_id(day).toString()
+    const now_div: Element = $('#transaction-view').querySelector(`[id='${ id }']`)
     now_div.scrollIntoView()
 }
 
@@ -172,9 +173,6 @@ window.onload = async () =>
 
     await load_year(get_current_year())
     scroll_to_now()
-
-    await Category.new('drink', 0xF00)
-    await Place.new('spoons', 0xF00)
 }
 
 async function back_a_year()
