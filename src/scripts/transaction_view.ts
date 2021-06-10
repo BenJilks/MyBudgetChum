@@ -204,7 +204,7 @@ async function add_transaction_add()
     const place = await Place.get($('#place-input').value)
     if ((!isNaN(amount))&&(category != null)&&(place !=null)) {
         await Transaction.new(amount, category, place)
+        await load_year(parseInt($('#year-display').innerHTML))
+        $('#add-transaction-div').style.display = 'none'
     }
-    await load_year(parseInt($('#year-display').innerHTML))
-    $('#add-transaction-div').style.display = 'none'
 }
