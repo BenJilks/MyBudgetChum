@@ -114,10 +114,10 @@ export class DataBase
             request => request.result)
     }
 
-    public get(table: string, query?: IDBValidKey | IDBKeyRange): Promise<any[]>
+    public get(table: string, query?: IDBValidKey | IDBKeyRange, count?: number): Promise<any[]>
     {
         return this.do_request(table, 'readonly',
-            store => store.getAll(query), 
+            store => store.getAll(query, count), 
             request => request.result)
     }
 
