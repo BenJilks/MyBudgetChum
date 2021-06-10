@@ -1,5 +1,6 @@
 import { Group } from './transaction'
 import { format_money } from './config'
+import { color_from_number } from './util'
 
 export class PiChart
 {
@@ -28,7 +29,7 @@ export class PiChart
             const percent = (total == 0 ? 1 : num / total)
             const ring = document.createElement('div')
             const rotation = `rotateZ(${ last_rotation_offset * 360 }deg)`
-            const color = `#${  category.color.toString(16) }`
+            const color = color_from_number(category.color)
             ring.className = 'ring'
             ring.style.clipPath = this.clip_path_for(percent)
             ring.style.transform = rotation

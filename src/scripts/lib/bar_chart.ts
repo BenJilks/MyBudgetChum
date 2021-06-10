@@ -1,5 +1,7 @@
 import { format_money } from './config'
 
+type Item = {label: string, value: number}
+
 export class BarChart
 {
 
@@ -10,30 +12,29 @@ export class BarChart
         this.bar_container = container.querySelector('#bar-container')
     }
 
-    public async set_data(data: number[])
+    public async set_data(data: Item[])
     {
-        const max = Math.max(...data.map(Math.abs))
-
         this.bar_container.innerHTML = ''
-
+        
+        const max = Math.max(...data.map(x => Math.abs(x.value)))
         const bar_promises: Promise<HTMLDivElement>[] = []
         data.forEach((item, index) =>
-            bar_promises.push(this.add_bar(item, max, index + 1)))
+            bar_promises.push(this.add_bar(item, max)))
         
         const bars = await Promise.all(bar_promises)
         bars.forEach(item => this.bar_container.appendChild(item))
     }
 
-    private async add_bar(value: number, max: number, index: number): Promise<HTMLDivElement>
+    private async add_bar(item: Item, max: number): Promise<HTMLDivElement>
     {
         const unit = document.createElement('div')
         unit.className = 'unit'
 
-        const percent = value / max * 0.8
+        const percent = item.value / max * 0.8
         const bar = document.createElement('div')
         bar.id = 'bar'
-        bar.style.height = Math.abs(percent)*50 + '%'
-        if (value >= 0)
+        bar.style.height = Math.abs(percent)*30 + '%'
+        if (item.value >= 0)
         {
             bar.style.backgroundColor = 'lightgreen'
             bar.style.transform = `translateY(-100%)`
@@ -45,15 +46,15 @@ export class BarChart
         
         const label = document.createElement('text')
         label.id = 'label'
-        label.innerHTML = `${ await format_money(value) }`
-        if (value >= 0)
+        label.innerHTML = `${ await format_money(item.value) }`
+        if (item.value >= 0)
             label.style.top = `-${ 0.6 * 2 }em`
         else
             label.style.bottom = `-${ 0.6 * 2 }em`
 
         const x_label = document.createElement('text')
         x_label.id = 'x-label'
-        x_label.innerHTML = (index++) + ''
+        x_label.innerHTML = item.label
         
         bar.appendChild(label)
         unit.appendChild(bar)

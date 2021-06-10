@@ -13,6 +13,10 @@
         <i class="fa fa-angle-double-right" id="forward-a-week"></i>
     </div>
   
-    {{ templates/pi_chart.html id=spending }}
+    <div class="charts">
+      {{ templates/pi_chart.html id=category-spending }}
+      {{ templates/pi_chart.html id=place-spending }}
+      {{ templates/bar_chart.html id=bar-chart }}
+    </div>
   </body>
 </html>

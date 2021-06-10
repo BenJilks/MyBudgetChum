@@ -1,6 +1,7 @@
 @import lib/config.sass
 @import lib/nav_bar.sass
 @import lib/pi_chart.sass
+@import lib/bar_chart.sass
 
 .week
     position: fixed
@@ -31,6 +32,16 @@
         height: 1px
         background-color: white
 
-#spending
-    width: 100%
-    height: 100%
+.charts
+    display: flex
+    flex-wrap: wrap
+    margin: 2em
+
+    .pi-chart
+        width: 20em
+        flex-grow: 1
+        aspect-ratio: 1 / 1
+
+    .bar-chart
+        width: 100%
+        height: 20em

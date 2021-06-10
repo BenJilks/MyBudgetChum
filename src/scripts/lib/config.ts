@@ -49,7 +49,6 @@ export class Config
     public async get(key: string): Promise<string>
     {
         await this.wait_for_load()
-        console.log(this.settings)
         return this.settings.get(key)
     }
 
