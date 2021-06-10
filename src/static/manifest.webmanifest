@@ -1,0 +1,21 @@
+{
+    "background_color": "#222",
+    "description": "We have literally solved poverty",
+    "display": "fullscreen",
+    "icons": 
+    [
+        {
+            "src": "https://raw.githubusercontent.com/mdn/pwa-examples/master/a2hs/icon/fox-icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://raw.githubusercontent.com/mdn/pwa-examples/master/js13kpwa/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "name": "My Budget Chum",
+    "short_name": "MBC",
+    "start_url": "/index.html"
+}

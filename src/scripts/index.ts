@@ -1,6 +1,18 @@
 import { calculate_budget_left } from './lib/budget'
 import {Category, Place} from "./lib/transaction";
 
+if ('serviceWorker' in navigator) 
+{
+    navigator.serviceWorker
+        .register('/service_worker.js')
+        .then(() => console.log('Service Worker Registered'))
+}
+
+window.addEventListener('beforeinstallprompt', e => 
+{
+    console.log(`'beforeinstallprompt' event was fired.`);
+})
+
 window.onload = async () =>
 {
     console.log(await calculate_budget_left(new Date(Date.now())))
