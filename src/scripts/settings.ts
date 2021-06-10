@@ -6,7 +6,16 @@ import { DataBase } from './lib/database'
 
 let add_group_mode: ReportType
 
-function load_currencies()
+async function load_budget()
+{
+    const budget = (await Config.the().get('budget')) ?? "0"
+    const is_monthly = (await Config.the().get('budget-is-monthly')) ?? "false"
+
+    $('#budget').value = budget
+    $('#monthly').checked = is_monthly == "true"
+}
+
+async function load_currencies()
 {
     CURRENCIES.forEach((currency, id) => 
     {
@@ -15,6 +24,11 @@ function load_currencies()
         option.value = id
         $('#currency').appendChild(option)
     })
+
+    const currency = (await Config.the().get('currency')) ?? "SOL"
+    $('#currency').value = currency
+    $('#currency').onchange = select_currency
+    $('#budgettxt').innerHTML = CURRENCIES.get(currency).symbol
 }
 
 function create_group(type: ReportType, group: Group): HTMLDivElement
@@ -55,18 +69,25 @@ async function load_groups()
 
 window.onload = async () =>
 {
+    load_budget()
     load_currencies()
     load_groups()
-
-    const currency = await Config.the().get('currency')
-    $('#currency').value = currency
-    $('#currency').onchange = select_currency
-    $('#budgettxt').innerHTML = CURRENCIES.get(currency).symbol
 
     $('#add-category').onclick = add_category
     $('#add-place').onclick = add_place
     $('#add-group-cancel').onclick = add_group_cancel
     $('#add-group-add').onclick = add_group_add
+    $('#budget').onchange = update_budget
+    $('#weekly').onchange = update_budget
+    $('#monthly').onchange = update_budget
+}
+
+async function update_budget()
+{
+    const budget = $('#budget').value
+    const is_monthly = $('#monthly').checked ? "true" : "false"
+    await Config.the().set('budget', budget)
+    await Config.the().set('budget-is-monthly', is_monthly)
 }
 
 async function select_currency()
