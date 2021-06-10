@@ -142,11 +142,15 @@ async function add_group_add()
     switch (add_group_mode)
     {
         case ReportType.CATEGORY:
-            await Category.new(name, color)
+            if (name.length != 0) {
+                await Category.new(name, color)
+            }
             break
         
         case ReportType.PLACE:
-            await Place.new(name, color)
+            if (name.length != 0) {
+                await Place.new(name, color)
+            }
             break
     }
     await load_groups()

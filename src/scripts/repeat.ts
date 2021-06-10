@@ -150,13 +150,12 @@ async function add_repeat_add()
                 success = true
             }
         }
-        else
-            {
+        else {
                 await Repeat.update(repeat_editing, name, amount, category, place, timer)
                 success = true
             }
-
         }
+
     if (success) {
         await load_repeat_list()
         repeat_editing = null
