@@ -1,15 +1,19 @@
 
-$header-height: 4em
 $background-color: #222
 $forground-color: #c4cccd
 $accent-color: #22a05a
+
+$phone-header-height: 4em
+$phone-header-width: 0em
+$desktop-header-height: 0em
+$desktop-header-width: 13em
 
 body
     font-family: Arial, Helvetica, sans-serif
     color: #c4cccd
     background-color: #222
     margin: 0
-    padding-top: $header-height + 1em
+    padding-top: calc(var(--header-height) + 1em)
 
 button
     background-color: $accent-color

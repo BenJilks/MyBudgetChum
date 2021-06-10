@@ -5,20 +5,22 @@
     <script src='transaction_view.js'></script>
   </head>
   <body>
-    {{ templates/nav_bar.html }}
+    {{ templates/nav_bar.html transactions=active }}
 
-    <div class="year">
-      <i class="fa fa-angle-double-left" id="back-a-year"></i>
-      <div id="center">
-        <text id="year-display">2021</text>
-        <i class="fa fa-plus-circle" id="add-transaction"></i>
+    <div class="content">
+      <div class="year">
+        <i class="fa fa-angle-double-left" id="back-a-year"></i>
+        <div id="center">
+          <text id="year-display">2021</text>
+          <i class="fa fa-plus-circle" id="add-transaction"></i>
+        </div>
+        <i class="fa fa-angle-double-right" id="forward-a-year"></i>
       </div>
-      <i class="fa fa-angle-double-right" id="forward-a-year"></i>
-    </div>
 
-    <div class="transaction-list" id="transaction-view">
-    </div>
+      <div class="transaction-list" id="transaction-view">
+      </div>
 
-    {{ templates/add_transaction.html }}
+      {{ templates/add_transaction.html }}
+    </div>
   </body>
 </html>

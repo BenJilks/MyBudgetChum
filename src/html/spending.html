@@ -5,18 +5,20 @@
     <script src='spending.js'></script>
   </head>
   <body>
-    {{ templates/nav_bar.html }}
+    {{ templates/nav_bar.html spending=active }}
 
-    <div class="week">
-        <i class="fa fa-angle-double-left" id="back-a-week"></i>
-        <text id="week-display">June Week 1</text>
-        <i class="fa fa-angle-double-right" id="forward-a-week"></i>
-    </div>
-  
-    <div class="charts">
-      {{ templates/pi_chart.html id=category-spending }}
-      {{ templates/pi_chart.html id=place-spending }}
-      {{ templates/bar_chart.html id=bar-chart }}
+    <div class="content">
+      <div class="week">
+          <i class="fa fa-angle-double-left" id="back-a-week"></i>
+          <text id="week-display">June Week 1</text>
+          <i class="fa fa-angle-double-right" id="forward-a-week"></i>
+      </div>
+    
+      <div class="charts">
+        {{ templates/pi_chart.html id=category-spending }}
+        {{ templates/pi_chart.html id=place-spending }}
+        {{ templates/bar_chart.html id=bar-chart }}
+      </div>
     </div>
   </body>
 </html>
