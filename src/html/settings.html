@@ -8,6 +8,22 @@
         {{ templates/nav_bar.html settings=active }}
 
         <div class="content">
+            <div class="add-group" id="add-group-div">
+                <h1 id="add-group-title">Add Group</h1>
+                <div class="field">
+                    <text class="name">Name</text>
+                    <input class="input" id="name-input" />
+                </div>
+                <div class="field">
+                    <text class="name">Color</text>
+                    <input type="color" class="input" id="color-input" />
+                </div>
+                <div class="done-buttons">
+                    <button id="add-group-cancel">Cancel</button>
+                    <button id="add-group-add">Add</button>
+                </div>
+            </div>
+
             <div class="settingscontainer">
                 <h4>Set Budget</h4>
                 <div class="setting-field">
@@ -39,22 +55,6 @@
                     <i class="fa fa-plus-square" aria-hidden="true" id="add-place"></i>
                 </div>
                 <div class="group-list" id="place-list"></div>
-            </div>
-
-            <div class="add-group" id="add-group-div">
-                <h1 id="add-group-title">Add Group</h1>
-                <div class="field">
-                    <text class="name">Name</text>
-                    <input class="input" id="name-input" />
-                </div>
-                <div class="field">
-                    <text class="name">Color</text>
-                    <input type="color" class="input" id="color-input" />
-                </div>
-                <div class="done-buttons">
-                    <button id="add-group-cancel">Cancel</button>
-                    <button id="add-group-add">Add</button>
-                </div>
             </div>
         </div>
     </body>
