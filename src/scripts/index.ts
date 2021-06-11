@@ -1,4 +1,4 @@
-import { calculate_budget_left } from './lib/budget'
+import { calculate_total_net_budget } from './lib/budget';
 import {Category, Place} from "./lib/transaction";
 
 if ('serviceWorker' in navigator) 
@@ -15,7 +15,7 @@ window.addEventListener('beforeinstallprompt', e =>
 
 window.onload = async () =>
 {
-    console.log(await calculate_budget_left(new Date(Date.now())))
+    console.log(await calculate_total_net_budget())
     let p = await Place.get_all();
     if (p.length === 0) {
         Place.new("Supermarket", 0x10ccc7)
@@ -27,5 +27,3 @@ window.onload = async () =>
         Category.new("Bills", 0xd01616)
     }
 }
-
-
