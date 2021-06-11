@@ -66,8 +66,8 @@ function transactions_in_day(transactions: Transaction[], date: Date): Transacti
 {
     const start = new Date(date.valueOf())
     const end = new Date(date.valueOf())
-    start.setHours(0)
-    end.setHours(24)
+    start.setHours(0, 0, 0, 0)
+    end.setHours(24, 0, 0, 0)
     return transactions.filter(x => x.timestamp >= start && x.timestamp < end)
 }
 
