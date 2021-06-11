@@ -19,6 +19,7 @@ window.onload = async () =>
     let p = await Place.get_all();
     if (p.length === 0) {
         Place.new("Supermarket", 0x10ccc7)
+        Place.new("House", 0x69f542)
     }
     let c = await Category.get_all();
     if (c.length === 0) {
