@@ -114,9 +114,9 @@ async function load_year(year: number)
     const temp_transaction_container = document.createElement('div')
 
     let date = new Date(Date.now())
+    date.setHours(0, 0, 0, 0)
     date.setFullYear(year)
     date.setMonth(0, 1)
-    date.setHours(0)
 
     const transactions = await transactions_in_year(date)
     let day_in_year = 0
