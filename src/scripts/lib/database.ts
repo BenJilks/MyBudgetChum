@@ -1,3 +1,4 @@
+import { Category, Place } from "./transaction"
 
 export class DataBase
 {
@@ -5,6 +6,7 @@ export class DataBase
     private static instance: DataBase = null
 
     private database: IDBDatabase
+    private is_new_database: boolean
 
     // NOTE: Stores any tables that are currently being made,
     //       this is just to assure we don't use it in that state.
@@ -14,31 +16,22 @@ export class DataBase
 
     private async create_new_database(event: IDBVersionChangeEvent)
     {
+        this.is_new_database = true
         const database: IDBDatabase = (event.target as any).result
 
         const create_table = (table: string, key?: string) =>
         {
-            return new Promise((resolve) =>
-            {
-                const store =
-                    key == null
-                    ? database.createObjectStore(table, { autoIncrement : true })
-                    : database.createObjectStore(table, { keyPath: key })
-
-                store.transaction.oncomplete = () => resolve(null)
-            })
+            key == null
+                ? database.createObjectStore(table, { autoIncrement : true })
+                : database.createObjectStore(table, { keyPath: key })
         }
 
-        await Promise.all(
-        [ 
-            create_table('categories', 'name'),
-            create_table('places', 'name'),
-            create_table('transactions', 'timestamp'),
-            create_table('repeat'),
-            create_table('config', 'key'),
-            create_table('budget-cache', 'week'),
-        ])
-        this.init_database(database)
+        create_table('categories', 'name')
+        create_table('places', 'name')
+        create_table('transactions', 'timestamp')
+        create_table('repeat')
+        create_table('config', 'key')
+        create_table('budget-cache', 'week')
     }
 
     private ensure_database_is_ready(): Promise<void>
@@ -143,7 +136,7 @@ export class DataBase
             () => null)
     }
 
-    private init_database(database: IDBDatabase)
+    private async init_database(database: IDBDatabase)
     {
         this.database = database
         this.database.onerror = (event) =>
@@ -158,10 +151,23 @@ export class DataBase
             this.notify_when_database_is_ready.forEach((resolve) => resolve())
             this.notify_when_database_is_ready = null
         }
+
+        if (this.is_new_database)
+        {
+            // Create default groups
+            console.log('create defaults')
+            await Place.new("Supermarket", 0x10ccc7)
+            await Place.new("House", 0x69f542)
+            await Category.new("Food", 0xb31abd)
+            await Category.new("Drink", 0x0918f0)
+            await Category.new("Bills", 0xd01616)
+            this.is_new_database = false
+        }
     }
 
     private constructor()
     {
+        this.is_new_database = false
         this.is_transaction_in_progress = false
         this.notify_when_transaction_is_done = []
         this.notify_when_database_is_ready = []
@@ -180,7 +186,7 @@ export class DataBase
             console.error(`Unable to connect to database ${ request.error }`)
         }
         request.onsuccess = () => this.init_database(request.result)
-        request.onupgradeneeded = (event) => this.create_new_database(event)
+        request.onupgradeneeded = event => this.create_new_database(event)
     }
 
     public static the(): DataBase
