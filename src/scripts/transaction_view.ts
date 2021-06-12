@@ -83,9 +83,9 @@ async function create_week(start: Date, transactions: Transaction[]): Promise<HT
     week_div.innerHTML = `
         <h1>${ month } Week ${ week_num + 1 }</h1>
         <div id="day-container"></div>
-        <text>total: ${ await format_money(total_spent) }</text>
+        <text>Total: ${ await format_money(total_spent) }</text>
         <text style="${ budget_left == null ? 'color: #666' : '' }">
-            budget left: 
+            Budget Left: 
             <text style="
             ${ 
                 budget_left != null 

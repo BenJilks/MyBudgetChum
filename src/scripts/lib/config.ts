@@ -88,16 +88,18 @@ interface Currency
     readonly symbol: string
     readonly format_type: CurrencyFormatType
     readonly plural: string
+    readonly precision: number
 }
 
 function make_currency(full_name: string, symbol: string, 
-    format_type: CurrencyFormatType, plural?: string): Currency
+    format_type: CurrencyFormatType, plural?: string, precision?: number): Currency
 {
     return {
         full_name: full_name, 
         symbol: symbol,
         format_type: format_type,
         plural: plural,
+        precision: precision ?? 2,
     }
 }
 
@@ -107,13 +109,15 @@ export const CURRENCIES: Map<string, Currency> = new Map(
     ['USD', make_currency('United States Dollar', '$', CurrencyFormatType.Suffix)],
     ['EUR', make_currency('Euro', '€', CurrencyFormatType.Suffix)],
     ['SOL', make_currency('Peruvian Sol', 'sol', CurrencyFormatType.Plural, 'soles')],
-    ['BTC', make_currency('Bitcoin', '₿', CurrencyFormatType.Prefix)],
+    ['BTC', make_currency('Bitcoin', '₿', CurrencyFormatType.Prefix, null, 8)],
+    ['mBTC', make_currency('Millibitcoin', 'm₿', CurrencyFormatType.Prefix, null, 8 - 3)],
 ])
 
 export function format_money_of_currency(value: number, currency_setting: string): string
 {
     const currency = CURRENCIES.get(currency_setting)
-    const display_value = Math.round(value * 100) / 100
+    const precision = Math.pow(10, currency.precision)
+    const display_value = Math.round(value * precision) / precision
 
     switch (currency.format_type)
     {
