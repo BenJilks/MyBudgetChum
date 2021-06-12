@@ -2,59 +2,39 @@
 @import lib/nav_bar.sass
 
 .bodyelement
-    padding-left: 16px
-
-.button
-    border-radius: 8px
-    color: white
-    padding: 16px 32px
+    margin: 2em
     text-align: center
-    text-decoration: none
-    display: inline-block
-    font-size: 16px
-    margin: 4px 2px
-    border: 1px solid #000
-    pointer-events: none
-    min-width: 30%
-
-    h1, h4
-        font-weight: normal
-
-    @media screen and (max-width: 400px) 
-        h1, h4
-            font-size: 4vw
-        
-        
-
-.button1
-    background-color: #ea3e7e
-.button2
-    background-color: #c541ec
-.button3
-    background-color: #ff645c
-.button4
-    background-color: #0e80ff
 
 section
-    display: grid
-    grid-template-columns: 1fr 1fr
-    grid-template-rows: auto auto
-    grid-gap: 10px
-    grid-auto-flow: rows
-    height: 40%
-    width: 80%
-    margin-left: auto
-    margin-right: auto
+    box-sizing: content-box
+    display: flex
+    margin: 2em 4em
+    height: 28em
+    flex-wrap: wrap
+
+    .button
+        display: inline-block
+        padding: 1em
+        margin: 1em
+        flex-grow: 1
+        flex-basis: calc(50% - 5em)
+        height: 10em
+
+        border-radius: 8px
+        font-size: 16px
+        text-align: center
+        text-decoration: none
+        color: white
+        pointer-events: none
+
+        h1, h4
+            font-weight: normal
 
 .overviewbox
     color: black
-    font-weight: normal
     background-color: #c4cccd
-    text-align: center
-    width: 80%
-    border: 2px solid
-    border-color: #c4cccd
+    border: 2px solid #c4cccd
     border-radius: 8px
-    margin-top: 10%
-    margin-left: auto
-    margin-right: auto
+    font-weight: normal
+    text-align: center
+    margin: 4em

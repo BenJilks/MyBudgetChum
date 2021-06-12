@@ -147,3 +147,13 @@ export async function get_weekly_budget(): Promise<number>
         ? budget / 4.5
         : budget
 }
+
+export async function get_monthly_budget(): Promise<number>
+{
+    const budget = parseInt((await Config.the().get('budget')) ?? "0")
+    const monthly = (await Config.the().get('budget-is-monthly')) ?? "false"
+
+    return monthly == "true"
+        ? budget
+        : budget * 4.5
+}
