@@ -1,5 +1,5 @@
 import { calculate_total_net_budget } from './lib/budget';
-import {Category, Place} from "./lib/transaction";
+import {Category, Place, Transaction} from "./lib/transaction";
 
 if ('serviceWorker' in navigator) 
 {
@@ -28,5 +28,4 @@ window.onload = async () =>
         Category.new("Drink", 0x0918f0)
         Category.new("Bills", 0xd01616)
     }
-    console.log(await calculate_total_net_budget());
 }

@@ -36,6 +36,7 @@ export class DataBase
             create_table('transactions', 'timestamp'),
             create_table('repeat'),
             create_table('config', 'key'),
+            create_table('budget-cache', 'week'),
         ])
         this.init_database(database)
     }

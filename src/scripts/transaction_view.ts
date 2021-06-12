@@ -1,5 +1,6 @@
 import { Category, Place, Transaction } from './lib/transaction'
 import { format_money, MONTHS, WEEK_DAYS } from './lib/config'
+import { calculate_total_net_budget } from './lib/budget'
 import { $ } from './lib/util'
 
 function ordinal(x: number): string
@@ -73,6 +74,8 @@ function transactions_in_day(transactions: Transaction[], date: Date): Transacti
 
 async function create_week(start: Date, transactions: Transaction[]): Promise<HTMLDivElement>
 {
+    const [budget_left, total_spent] = await calculate_total_net_budget(start)
+
     const month = MONTHS[start.getMonth()]
     const week_num = Math.floor(start.getDate() / 7)
     const week_div = document.createElement('div')
@@ -80,8 +83,8 @@ async function create_week(start: Date, transactions: Transaction[]): Promise<HT
     week_div.innerHTML = `
         <h1>${ month } Week ${ week_num + 1 }</h1>
         <div id="day-container"></div>
-        <text>total: {{ num }}</text>
-        <text>budget left: {{ num }}</text>
+        <text>total: ${ total_spent }</text>
+        <text ${ budget_left == null ? 'style="color: #666"' : '' }>budget left: ${ budget_left ?? 'N/A' }</text>
     `
 
     const day_container = week_div.querySelector('#day-container')

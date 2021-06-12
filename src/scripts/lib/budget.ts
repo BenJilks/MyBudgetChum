@@ -1,73 +1,93 @@
 import { DataBase } from './database';
 import { Transaction } from './transaction'
 
-export async function calculate_weekly_net_budget(date: Date): Promise<number>
+// Temp weekly budget value
+const weekly_budget = 30
+
+function get_week(date: Date): Date
 {
-    //console.log("\n\n");
-
-    //const transactions = await Transaction.get_all()
-
-    //temp weekly budget value
-    const weekly_budget: number = 30;
-
-    const start = new Date(date.valueOf());
-    start.setDate(date.getDate() - date.getDay());
-
-    const end = new Date(date.valueOf());
-    //end.setDate(start.getDate() + 7);    //actual code
-    end.setDate(date.getDate()  + (6 - date.getDay()));
-    //console.log("\nstart getdate: "+start.getDate());
-
-
-    let transactions = null;
-    transactions = await Transaction.get_in_range(start, end);
-    //console.log(transactions)
-
-    let total_spent: number = 0;
-
-    //console.log(`Week beginning: ${start}`)
-
-    transactions.forEach(element => {
-        console.log(element)
-        total_spent += element.amount;
-    });
-
-    //console.log("Weekly spent: " + total_spent);
-    
-    let budget_left: number = weekly_budget - total_spent;
-    //console.log("Budget remaining: " + budget_left);
-
-    //console.log(`Week ending: ${end}`)
-
-    return budget_left;
+    const start = new Date(date.valueOf())
+    start.setHours(0, 0, 0, 0)
+    start.setDate(date.getDate() - date.getDay())
+    return start
 }
 
-export async function calculate_total_net_budget(): Promise<number>
+async function get_cache(week: Date): Promise<number>
 {
+    const cache = await DataBase.the().get('budget-cache', week)
+    if (cache.length == 0)
+        return null
+    
+    return cache[0].amount
+}
 
-    let net_budget_left: number = 0;
+async function set_cache(week: Date, amount: number)
+{
+    const item = { week: week, amount: amount }
+    await DataBase.the().update('budget-cache', item)
+}
 
-    //get first transaction
-    const first_transaction = Transaction.get_first();
+export async function calculate_weekly_total(start: Date): Promise<number>
+{
+    const end = new Date(start.valueOf())
+    end.setHours(0, 0, 0, 0)
+    end.setDate(start.getDate() + 7)
 
-    //get date of first transaction
-    const date = new Date((await first_transaction).timestamp);
-    date.setHours(0, 0, 0, 0)
+    const transactions = await Transaction.get_in_range(start, end)
+    let total_spent = 
+        transactions.reduce((total, x) => total += x.amount, 0)
+    
+    return total_spent
+}
 
-    let current_date = new Date(Date.now())
-    let end_of_current_week = new Date(current_date.setDate(current_date.getDate() + (7 - date.getDay())));
+export async function calculate_total_net_budget(date: Date): Promise<[number, number]>
+{
+    // If this week is in the future, there's no need to calculate a budget
+    const this_week = get_week(new Date(Date.now()))
+    const end_of_budget = get_week(date)
+    if (end_of_budget > this_week)
+        return [null, 0]
+ 
+    // Get first transaction
+    const first_transaction = await Transaction.get_first()
+    if (first_transaction == null || first_transaction == undefined)
+        return [null, 0]
+        
+    // If this week is before the first transaction, no need to calculate anything
+    const start_of_budget = get_week(first_transaction.timestamp)
+    if (end_of_budget < start_of_budget)
+        return [null, 0]
 
-    //while the week that we're looking at is before the current date
-    while (date <= end_of_current_week)
+    let current_week = new Date(end_of_budget.valueOf())
+    let net_budget_left = 0
+
+    // Loop through each week backwards to find the latest cached week
+    while (current_week >= start_of_budget)
     {
-        //calculate budget remaining for the specified week and change net_budget_left accordingly
-        net_budget_left = net_budget_left + await calculate_weekly_net_budget(date);
-        console.log(net_budget_left);
+        // Check for a cache, if we find one, set our net bedget 
+         // left to it for a starting point.
+        let cache = await get_cache(current_week)
+        if (cache != null)
+        {
+            net_budget_left = cache
+            break
+        }
 
-        //increment date to the next week
-        date.setDate(date.getDate() + 7);
-
+        // Decrement date to the last week
+        current_week.setDate(current_week.getDate() - 7)
     }
 
-    return net_budget_left;
+    // Loop forward through each non cached week
+    while (current_week < end_of_budget)
+    {
+        current_week.setDate(current_week.getDate() + 7)
+
+        const week_total = await calculate_weekly_total(current_week)
+        net_budget_left += weekly_budget - week_total
+        if (current_week < this_week)
+            await set_cache(current_week, net_budget_left)
+    }
+
+    const week_total = await calculate_weekly_total(end_of_budget)
+    return [net_budget_left, week_total]
 }

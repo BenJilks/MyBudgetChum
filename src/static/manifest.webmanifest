@@ -1,7 +1,7 @@
 {
     "background_color": "#222",
     "description": "We have literally solved poverty",
-    "display": "fullscreen",
+    "display": "standalone",
     "icons": 
     [
         {
