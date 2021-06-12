@@ -137,7 +137,7 @@ async function add_repeat_add()
         type: period, hour: hour, month_day: month_day, 
         week_day: week_day, month: month 
     });
-    if ((name.length != 0)&&(category != null)&&(place != null)&&(!isNaN(amount))&&(period != null)&&(!isNaN(hour))&&(amount > 0)&&(hour > 0)&&(hour < 25)) {
+    if ((name.length != 0)&&(category != null)&&(place != null)&&(!isNaN(amount))&&(period != null)&&(!isNaN(hour))&&(hour > 0)&&(hour < 25)) {
         if (repeat_editing == null) {
             if ((RepeatType.MONTHLY)||(RepeatType.YEARLY)) {
                 if (!isNaN(month_day)&&(month_day > 0)&&(month_day < 32)) {
