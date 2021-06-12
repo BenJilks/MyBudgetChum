@@ -1,8 +1,6 @@
 import { DataBase } from './database';
 import { Transaction } from './transaction'
-
-// Temp weekly budget value
-const weekly_budget = 30
+import { get_weekly_budget } from './config'
 
 function get_week(date: Date): Date
 {
@@ -78,6 +76,7 @@ export async function calculate_total_net_budget(date: Date): Promise<[number, n
     }
 
     // Loop forward through each non cached week
+    const weekly_budget = await get_weekly_budget()
     while (current_week < end_of_budget)
     {
         current_week.setDate(current_week.getDate() + 7)

@@ -133,3 +133,13 @@ export async function format_money(value: number): Promise<string>
     let currency_setting = await Config.the().get('currency')
     return await format_money_of_currency(value, currency_setting ?? 'SOL')
 }
+
+export async function get_weekly_budget(): Promise<number>
+{
+    const budget = parseInt((await Config.the().get('budget')) ?? "0")
+    const monthly = (await Config.the().get('budget-is-monthly')) ?? "false"
+
+    return monthly == "true"
+        ? budget / 4.5
+        : budget
+}
