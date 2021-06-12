@@ -14,7 +14,17 @@
     font-size: 16px
     margin: 4px 2px
     border: 1px solid #000
-    cursor: pointer
+    pointer-events: none
+    min-width: 30%
+
+    h1, h4
+        font-weight: normal
+
+    @media screen and (max-width: 400px) 
+        h1, h4
+            font-size: 4vw
+        
+        
 
 .button1
     background-color: #ea3e7e
