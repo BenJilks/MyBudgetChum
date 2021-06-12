@@ -15,16 +15,18 @@ window.addEventListener('beforeinstallprompt', e =>
 
 window.onload = async () =>
 {
-    console.log(await calculate_total_net_budget())
     let p = await Place.get_all();
     if (p.length === 0) {
+        console.log("running placs")
         Place.new("Supermarket", 0x10ccc7)
         Place.new("House", 0x69f542)
     }
     let c = await Category.get_all();
     if (c.length === 0) {
+        console.log("running cats")
         Category.new("Food", 0xb31abd)
         Category.new("Drink", 0x0918f0)
         Category.new("Bills", 0xd01616)
     }
+    console.log(await calculate_total_net_budget());
 }
