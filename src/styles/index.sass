@@ -1,34 +1,39 @@
 @import lib/config.sass
 @import lib/nav_bar.sass
 
+.content
+    display: flex
+    flex-direction: column
+
 .bodyelement
-    margin: 2em
+    margin: 1em
     text-align: center
 
-section
-    box-sizing: content-box
-    display: flex
-    margin: 2em 4em
-    height: 28em
-    flex-wrap: wrap
+.group-container
+    flex-grow: 1
+    
+    section
+        box-sizing: content-box
+        display: flex
+        margin: 0em 4em
+        flex-wrap: wrap
 
-    .button
-        display: inline-block
-        padding: 1em
-        margin: 1em
-        flex-grow: 1
-        flex-basis: calc(50% - 5em)
-        height: 10em
+        .button
+            display: inline-block
+            padding: 2em 1em
+            margin: 1em
+            flex-grow: 1
+            flex-basis: 20em
 
-        border-radius: 8px
-        font-size: 16px
-        text-align: center
-        text-decoration: none
-        color: white
-        pointer-events: none
+            border-radius: 8px
+            font-size: 1.2em
+            text-align: center
+            text-decoration: none
+            color: white
+            pointer-events: none
 
-        h1, h4
-            font-weight: normal
+            h1, h4
+                font-weight: normal
 
 .overviewbox
     color: black

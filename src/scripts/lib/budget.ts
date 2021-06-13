@@ -1,14 +1,7 @@
 import { DataBase } from './database';
 import { Transaction } from './transaction'
 import { get_weekly_budget } from './config'
-
-function get_week(date: Date): Date
-{
-    const start = new Date(date.valueOf())
-    start.setHours(0, 0, 0, 0)
-    start.setDate(date.getDate() - date.getDay())
-    return start
-}
+import { get_week } from './util'
 
 async function get_cache(week: Date): Promise<number>
 {
@@ -28,7 +21,6 @@ async function set_cache(week: Date, amount: number)
 export async function calculate_weekly_total(start: Date): Promise<number>
 {
     const end = new Date(start.valueOf())
-    end.setHours(0, 0, 0, 0)
     end.setDate(start.getDate() + 7)
 
     const transactions = await Transaction.get_in_range(start, end)

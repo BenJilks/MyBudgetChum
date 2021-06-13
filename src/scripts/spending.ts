@@ -3,7 +3,7 @@ import { PiChart } from './lib/pi_chart'
 import { BarChart } from './lib/bar_chart'
 import { Group, Transaction } from './lib/transaction'
 import { ReportType, create_report } from './lib/report'
-import { $ } from './lib/util'
+import { $, get_week_start_and_end } from './lib/util'
 
 const LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
 
@@ -11,17 +11,6 @@ let category_spending: PiChart
 let place_spending: PiChart
 let bar_chart: BarChart
 let current_week: Date
-
-function get_week_start_and_end(date: Date): [Date, Date]
-{
-    const start = new Date(date.valueOf())
-    start.setDate(date.getDate() - date.getDay())
-
-    const end = new Date(date.valueOf())
-    end.setDate(start.getDate() + 7)
-
-    return [start, end]
-}
 
 async function report_for_week(type: ReportType, start: Date, end: Date): Promise<Map<Group, number>>
 {
