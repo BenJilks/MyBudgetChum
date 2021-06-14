@@ -144,11 +144,13 @@ window.onload = () =>
             const name = $('#name-input').value
             const price = parseInt($('#price-input').value)
             const item = { name: name, price: price, count: 0 }
-            await DataBase.the().insert('shopping-item', item)
+            if ((name.length > 0)&&(price > 0)) {
+                await DataBase.the().insert('shopping-item', item)
 
-            $('#item-list').appendChild(await create_item(item))
-            $('#add-item-div').style.display = 'none'
-            update_shopping_list()
+                $('#item-list').appendChild(await create_item(item))
+                $('#add-item-div').style.display = 'none'
+                update_shopping_list()
+            }
         }
     }
 
