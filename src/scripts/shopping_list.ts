@@ -16,6 +16,7 @@ async function create_item(item: object): Promise<HTMLDivElement>
         <i class="fa fa-minus button" aria-hidden="true" id="dec"></i>
         <text class="button" id="count">${ count }</text>
         <i class="fa fa-plus button" aria-hidden="true" id="inc"></i>
+        <i class="fa fa-trash-o button" aria-hidden="true" id="remove"></i>
     `
 
     item_div.querySelector<HTMLElement>('#inc').onclick = async () => 
@@ -36,6 +37,13 @@ async function create_item(item: object): Promise<HTMLDivElement>
         await DataBase.the().update('shopping-item', item)
         update_shopping_list()
     }
+
+    item_div.querySelector<HTMLElement>('#remove').onclick = async () =>
+    {
+        item_div.remove()
+        await DataBase.the().remove('shopping-item', item['name'])
+    }
+
     return item_div
 }
 
@@ -185,7 +193,7 @@ window.onload = () =>
             const item = 
             { 
                 name: name, 
-                price: parseFloat(price), 
+                price: parseFloat(price),
                 category: category, 
                 place: place,
                 count: 0,
