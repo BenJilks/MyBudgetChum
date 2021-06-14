@@ -29,7 +29,7 @@ async function load_top_categories()
     
     const other_categories = (await Category.get_all())
         .filter(x => top_categories.find(y => y[0].name == x.name) == undefined)
-    
+
     for (let i = 0; i < 4; i++)
     {
         let category: Group = null
@@ -38,7 +38,7 @@ async function load_top_categories()
         if (i < top_categories.length)
             [category, amount] = top_categories[i]
         else
-            category = other_categories[top_categories.length - i]
+            category = other_categories[i - top_categories.length]
         
         if (category == undefined)
             break
