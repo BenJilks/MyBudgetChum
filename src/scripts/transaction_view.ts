@@ -12,9 +12,24 @@ function ordinal(x: number): string
     const last = str.charAt(str.length - 1)
     switch (last)
     {
-        case '1': return str + 'st'
-        case '2': return str + 'nd'
-        case '3': return str + 'rd'
+        case '1': 
+            if (str == '11') {
+              return str + "th"
+            } else { 
+                return str + 'st'
+            }
+        case '2':
+            if (str == '12') {
+                return str + "th"
+            } else { 
+                return str + 'nd'
+            }
+        case '3': 
+            if (str == '13') {
+                return str + "th"
+            } else { 
+                return str + 'rd'
+            }
         default:
             return str + 'th'
     }
