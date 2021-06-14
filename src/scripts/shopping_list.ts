@@ -43,6 +43,7 @@ function create_shopping_list_item(item: object): HTMLDivElement
 {
     const item_div = document.createElement('div')
     item_div.className = 'item'
+    item_div.id = JSON.stringify(item)
     item_div.innerHTML = `
         <text class="name">
             ${ item['name'] } 
@@ -98,25 +99,55 @@ async function update_shopping_list()
     })
 }
 
+async function load_groups()
+{
+    const categories = await Category.get_all()
+    categories.forEach(x => 
+    {
+        const category = document.createElement('option')
+        category.innerHTML = x.name
+        $('#category-input').appendChild(category)
+    })
+
+    const places = await Place.get_all()
+    places.forEach(x => 
+    {
+        const place = document.createElement('option')
+        place.innerHTML = x.name
+        $('#place-input').appendChild(place)
+    })
+}
+
 window.onload = () =>
 {
     $('#complete-button').onclick = async () =>
     {
-        $('#shopping-list').childNodes.forEach(item =>
+        let transactions = new Map<string, number>()
+        $('#shopping-list').childNodes.forEach(item_div =>
         {
-            const selected = item.querySelector('#selected')
+            const selected = item_div.querySelector('#selected')
             if (selected.checked)
             {
                 selected.checked = false
-                item.className = 'item'
+                item_div.className = 'item'
+
+                const item: object = JSON.parse(item_div.id)
+                const id = JSON.stringify([item['category'], item['place']])
+                const total = transactions.get(id) ?? 0
+                transactions.set(id, total + item['price'] * item['count'])
             }
         })
 
-        await Transaction.new(
-            total, 
-            await Category.get('Food'), 
-            await Place.get('Supermarket'))
+        if (transactions.size == 0)
+            return
 
+        transactions.forEach(async (total, id) =>
+        {
+            const [category, place] = JSON.parse(id)
+            await Transaction.new(total, 
+                await Category.get(category), 
+                await Place.get(place))
+        })
         window.location.href = 'transaction_view.html'
     }
 
@@ -135,24 +166,37 @@ window.onload = () =>
     $('#new-button').onclick = () =>
     {
         $('#add-item-div').style.display = 'block'
+
         $('#add-item-cancel').onclick = () =>
         {
             $('#add-item-div').style.display = 'none'
         }
+
         $('#add-item-create').onclick = async () =>
         {
             const name = $('#name-input').value
             const price = parseInt($('#price-input').value)
-            const item = { name: name, price: price, count: 0 }
-            if ((name.length > 0)&&(price > 0)) {
-                await DataBase.the().insert('shopping-item', item)
-
-                $('#item-list').appendChild(await create_item(item))
-                $('#add-item-div').style.display = 'none'
-                update_shopping_list()
+            const category = $('#category-input').value
+            const place = $('#place-input').value
+            const item = 
+            { 
+                name: name, 
+                price: price, 
+                category: category, 
+                place: place,
+                count: 0,
             }
+
+            if (!(name.length > 0 && price > 0))
+                return
+
+            await DataBase.the().insert('shopping-item', item)
+            $('#item-list').appendChild(await create_item(item))
+            $('#add-item-div').style.display = 'none'
+            update_shopping_list()
         }
     }
 
     load_items()
+    load_groups()
 }
