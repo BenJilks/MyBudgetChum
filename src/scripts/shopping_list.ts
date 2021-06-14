@@ -41,8 +41,8 @@ async function create_item(item: object): Promise<HTMLDivElement>
     item_div.querySelector<HTMLElement>('#remove').onclick = async () =>
     {
         item_div.remove()
-        update_shopping_list()
         await DataBase.the().remove('shopping-item', item['name'])
+        update_shopping_list()
     }
 
     return item_div
