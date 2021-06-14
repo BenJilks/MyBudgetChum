@@ -185,7 +185,7 @@ window.onload = () =>
             const item = 
             { 
                 name: name, 
-                price: parseInt(price), 
+                price: parseFloat(price), 
                 category: category, 
                 place: place,
                 count: 0,
