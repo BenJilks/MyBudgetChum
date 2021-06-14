@@ -1,6 +1,6 @@
 import { format_money, get_monthly_budget } from "./lib/config"
 import { ReportType, create_report } from "./lib/report"
-import { Transaction } from "./lib/transaction"
+import { Category, Group, Transaction } from "./lib/transaction"
 import { $, color_from_number } from "./lib/util"
 
 if ('serviceWorker' in navigator) 
@@ -27,12 +27,22 @@ async function load_top_categories()
         .sort(([_, a], [__, b]) => a - b)
         .reverse()
     
+    const other_categories = (await Category.get_all())
+        .filter(x => top_categories.find(y => y[0].name == x.name) == undefined)
+    
     for (let i = 0; i < 4; i++)
     {
-        if (i >= top_categories.length)
+        let category: Group = null
+        let amount = 0
+
+        if (i < top_categories.length)
+            [category, amount] = top_categories[i]
+        else
+            category = other_categories[top_categories.length - i]
+        
+        if (category == undefined)
             break
-            
-        const [category, amount] = top_categories[i]
+        
         const category_div = document.createElement('div')
         category_div.className = 'button'
         category_div.style.backgroundColor = color_from_number(category.color)
