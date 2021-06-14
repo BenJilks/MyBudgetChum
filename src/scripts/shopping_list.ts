@@ -175,21 +175,22 @@ window.onload = () =>
         $('#add-item-create').onclick = async () =>
         {
             const name = $('#name-input').value
-            const price = parseInt($('#price-input').value)
+            const price = $('#price-input').value
             const category = $('#category-input').value
             const place = $('#place-input').value
-            const item = 
-            { 
-                name: name, 
-                price: price, 
-                category: category, 
-                place: place,
-                count: 0,
-            }
 
             if (!(name.length > 0 && price > 0))
                 return
 
+            const item = 
+            { 
+                name: name, 
+                price: parseInt(price), 
+                category: category, 
+                place: place,
+                count: 0,
+            }
+    
             await DataBase.the().insert('shopping-item', item)
             $('#item-list').appendChild(await create_item(item))
             $('#add-item-div').style.display = 'none'
