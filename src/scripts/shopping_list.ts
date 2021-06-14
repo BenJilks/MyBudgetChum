@@ -1,6 +1,9 @@
 import { DataBase } from './lib/database'
 import { format_money } from './lib/config'
 import { $ } from './lib/util'
+import { Category, Place, Transaction } from './lib/transaction'
+
+let total = 0
 
 async function create_item(item: object): Promise<HTMLDivElement>
 {
@@ -45,8 +48,26 @@ function create_shopping_list_item(item: object): HTMLDivElement
             ${ item['name'] } 
             ${ item['count'] > 1 ? `(x${ item['count'] })` : '' }
         </text>
-        <input type="checkbox" />
+        <input type="checkbox" id="selected" />
     `
+
+    item_div.onclick = async () =>
+    {
+        const selected = item_div.querySelector<HTMLInputElement>('#selected')
+        selected.checked = !selected.checked
+
+        if (selected.checked)
+        {
+            item_div.className = 'item checked'
+            total += item['price'] * item['count']
+        }
+        else 
+        {
+            item_div.className = 'item'
+            total -= item['price'] * item['count']
+        }
+        $('#total').innerHTML = `Total: ${ await format_money(total) }`
+    }
 
     return item_div
 }
@@ -61,6 +82,8 @@ async function load_items()
         if (item['count'] > 0)
             $('#shopping-list').appendChild(await create_shopping_list_item(item))
     })
+
+    $('#total').innerHTML = `Total: ${ await format_money(total) }`
 }
 
 async function update_shopping_list()
@@ -77,6 +100,26 @@ async function update_shopping_list()
 
 window.onload = () =>
 {
+    $('#complete-button').onclick = async () =>
+    {
+        $('#shopping-list').childNodes.forEach(item =>
+        {
+            const selected = item.querySelector('#selected')
+            if (selected.checked)
+            {
+                selected.checked = false
+                item.className = 'item'
+            }
+        })
+
+        await Transaction.new(
+            total, 
+            await Category.get('Food'), 
+            await Place.get('Supermarket'))
+
+        window.location.href = 'transaction_view.html'
+    }
+
     $('#edit-button').onclick = () =>
     {
         $('#edit-screen').style.display = 'block'

@@ -10,6 +10,34 @@
         position: absolute
         display: none
 
+    #main-screen
+        display: flex
+        flex-direction: column
+        height: 100%
+        
+        #shopping-list
+            flex-grow: 1
+
+            .item > input
+                pointer-events: none
+
+            .checked
+                background-color: $accent-color
+                color: $background-color
+        
+        #bottom-bar
+            display: flex
+            align-items: center
+            padding: 0.2em 0.3em
+            gap: 0.2em
+            font-size: 4em
+            color: $accent-color
+
+            #total
+                color: $forground-color
+                width: 100%
+                font-size: 0.5em
+    
     #fade-overlay
         position: absolute
         top: 0
@@ -19,6 +47,7 @@
         background-color: black
         opacity: 0.5
         z-index: 1
+        display: none
 
     #edit-screen
         position: absolute
@@ -30,6 +59,8 @@
         border-radius: 1em
         background-color: $background-color
         z-index: 2
+        display: none
+        overflow-y: auto
 
         #item-list
             margin: 1em
