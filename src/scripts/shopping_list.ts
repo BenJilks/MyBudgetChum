@@ -197,7 +197,7 @@ window.onload = () =>
                 price: parseFloat(price),
                 category: category, 
                 place: place,
-                count: 0,
+                count: 1,
             }
     
             await DataBase.the().insert('shopping-item', item)
