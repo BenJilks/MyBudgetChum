@@ -17,8 +17,29 @@
         <i class="fa fa-angle-double-right" id="forward-a-year"></i>
       </div>
       
-      {{ templates/add_transaction.html }}
+      <div id="add-transaction-div" class="add-transaction field-box">
+        <h1>Add New Transactions</h1>
+        <div class="field">
+          <text class="name">Category</text>
+          <select class="input" id="category-input">
+          </select>
+        </div>
+          <div class="field">
+          <text class="name">Place</text>
+          <select class="input" id="place-input">
+          </select>
+        </div>
+          <div class="field">
+          <text class="name">Amount</text>
+          <input class="input" id="amount-input"/>
+        </div>
 
+        <div class="done-buttons">
+          <button id="add-transaction-cancel">Cancel</button>
+          <button id="add-transaction-add">Add</button>
+        </div>
+      </div>
+    
       <div class="transaction-list" id="transaction-view">
       </div>
     </div>

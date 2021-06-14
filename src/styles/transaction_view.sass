@@ -1,6 +1,6 @@
 @import lib/config.sass
 @import lib/nav_bar.sass
-@import lib/add_transaction.sass
+@import lib/input_field
 
 .year
     position: sticky
@@ -35,6 +35,11 @@
         bottom: -1px
         height: 1px
         background-color: white
+
+.add-transaction
+    display: none
+    background-color: $background-color
+    border-bottom: solid white 1px
 
 .transaction-list
     display: flex

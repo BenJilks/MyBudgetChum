@@ -1,7 +1,7 @@
 
 COMPILER=python ../../scripts/htmltemplate.py
 OUT=../../out
-SOURCES = index.htmlc transaction_view.htmlc spending.htmlc settings.htmlc repeat.htmlc
+SOURCES = index.htmlc transaction_view.htmlc spending.htmlc settings.htmlc repeat.htmlc shopping_list.htmlc
 FLAGS=
 
 %.htmlc: %.html

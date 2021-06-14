@@ -1,0 +1,38 @@
+<html>
+    <head>
+        {{ templates/header.html }}
+        <link rel="stylesheet" href="shopping_list.css">
+        <script src='shopping_list.js'></script>
+    </head>
+    <body>
+        {{ templates/nav_bar.html shopping_list=active }}
+
+        <div class="content">
+            <div class="add-item field-box" id="add-item-div">
+                <h1 id="add-item-title">New Item</h1>
+                <div class="field">
+                    <text class="name">Name</text>
+                    <input class="input" id="name-input" />
+                </div>
+                <div class="field">
+                    <text class="name">Price</text>
+                    <input type="number" class="input" id="price-input" />
+                </div>
+                <div class="done-buttons">
+                    <button id="add-item-cancel">Cancel</button>
+                    <button id="add-item-create">Add</button>
+                </div>
+            </div>
+
+            <div class="list" id="shopping-list"></div>
+            <i class="fa fa-pencil-square add-button" aria-hidden="true" id="edit-button"></i>
+
+            <div id="fade-overlay"></div>
+            <div id="edit-screen">
+                <div class="list" id="item-list"></div>
+                <i class="fa fa-plus-square add-button" aria-hidden="true" id="new-button"></i>
+                <i class="fa fa-check-square add-button" aria-hidden="true" id="done-button"></i>
+            </div>
+        </div>
+    </body>
+</html>

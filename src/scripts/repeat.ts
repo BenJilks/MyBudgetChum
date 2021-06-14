@@ -9,11 +9,11 @@ let repeat_editing: number
 function create_repeat(repeat: Repeat): HTMLDivElement
 {
     const repeat_div = document.createElement('div')
-    repeat_div.className = 'repeat'
+    repeat_div.className = 'item'
     repeat_div.innerHTML = `
-        <text id="name">${ repeat.name }</text>
-        <i class="fa fa-pencil" aria-hidden="true" id="edit"></i>
-        <i class="fa fa-trash-o" aria-hidden="true" id="remove"></i>
+        <text class="name">${ repeat.name }</text>
+        <i class="fa fa-pencil button" aria-hidden="true" id="edit"></i>
+        <i class="fa fa-trash-o button" aria-hidden="true" id="remove"></i>
     `
 
     repeat_div.querySelector<HTMLElement>('#edit').onclick = () => edit(repeat.id)

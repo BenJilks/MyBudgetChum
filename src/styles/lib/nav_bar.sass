@@ -4,7 +4,7 @@
     position: fixed
     top: 0
     background-color: $background-color
-    z-index: 2
+    z-index: 10
 
     #header
         display: flex
@@ -68,6 +68,9 @@
         width: 100%
         height: $phone-header-height
         border-bottom: solid $accent-color 2px
+
+        #navlinks
+            border-bottom: solid $accent-color 2px
 
 @media screen and (min-width: $phone-screen-size)
     .content

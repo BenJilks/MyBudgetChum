@@ -32,6 +32,7 @@ export class DataBase
         create_table('repeat')
         create_table('config', 'key')
         create_table('budget-cache', 'week')
+        create_table('shopping-item', 'name')
     }
 
     private ensure_database_is_ready(): Promise<void>
