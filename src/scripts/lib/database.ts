@@ -157,7 +157,6 @@ export class DataBase
         if (this.is_new_database)
         {
             // Create default groups
-            console.log('create defaults')
             await Place.new("Supermarket", 0x10ccc7)
             await Place.new("House", 0x69f542)
             await Category.new("Food", 0xb31abd)

@@ -1,7 +1,7 @@
 import { CURRENCIES, Config } from './lib/config'
 import { Category, Group, Place } from './lib/transaction'
 import { ReportType } from './lib/report'
-import { $ } from './lib/util'
+import { $, color_from_number } from './lib/util'
 import { DataBase } from './lib/database'
 
 let add_group_mode: ReportType
@@ -33,7 +33,7 @@ async function load_currencies()
 
 function create_group(type: ReportType, group: Group): HTMLDivElement
 {
-    const color = `#${ group.color.toString(16) }`
+    const color = color_from_number(group.color)
     const group_div = document.createElement('div')
     group_div.className = 'group'
     group_div.innerHTML = `

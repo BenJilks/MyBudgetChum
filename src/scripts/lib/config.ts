@@ -116,19 +116,25 @@ export const CURRENCIES: Map<string, Currency> = new Map(
 export function format_money_of_currency(value: number, currency_setting: string): string
 {
     const currency = CURRENCIES.get(currency_setting)
+    const formatter = new Intl.NumberFormat('en-US', 
+    { 
+        minimumFractionDigits: 2,
+        maximumFractionDigits: currency.precision
+    })
+
     const precision = Math.pow(10, currency.precision)
     const display_value = Math.round(value * precision) / precision
 
     switch (currency.format_type)
     {
         case CurrencyFormatType.Prefix:
-            return `${ value < 0 ? '-' : '' }${ currency.symbol }${ Math.abs(display_value) }`
+            return `${ value < 0 ? '-' : '' }${ currency.symbol }${ formatter.format(Math.abs(display_value)) }`
 
         case CurrencyFormatType.Suffix:
-            return `${ display_value } ${ currency.symbol }`
+            return `${ formatter.format(display_value) } ${ currency.symbol }`
 
         case CurrencyFormatType.Plural:
-            return `${ display_value } ${ Math.abs(value) == 1 ? currency.symbol : currency.plural }`
+            return `${ formatter.format(display_value) } ${ Math.abs(value) == 1 ? currency.symbol : currency.plural }`
     }
 }
 
