@@ -25,7 +25,7 @@ watch:
 	+"$(MAKE)" -C src/html watch &
 	+"$(MAKE)" -C src/static
 
-release: debug
-	for f in out/*.{js,html}; do $(MINIFY) $$f > temp; mv temp $$f; done
-	rm out/*.map
+release: 
+	bash -c "for f in out/*.{js,html,css}; do $(MINIFY) \$$f > temp; mv temp \$$f; done"
+	rm -f out/*.map
 
