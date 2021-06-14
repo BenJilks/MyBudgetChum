@@ -32,7 +32,6 @@ async function load_week(date: Date)
     category_spending.set_data(category_data)
 
     const place_data = await report_for_week(ReportType.PLACE, start, end)
-    console.log(place_data)
     place_spending.set_data(place_data)
 
     const transactions = await Transaction.get_in_range(start, end)

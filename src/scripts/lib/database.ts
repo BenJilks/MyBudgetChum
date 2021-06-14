@@ -1,3 +1,4 @@
+import { Repeat } from "./repeat"
 import { Category, Place } from "./transaction"
 
 export class DataBase
@@ -164,6 +165,15 @@ export class DataBase
             await Category.new("Bills", 0xd01616)
             this.is_new_database = false
         }
+
+        // Update repeats every 10 minutes
+        async function update_repeats()
+        {
+            const repeats = (await Repeat.get_all())
+                .forEach(x => x.trigger_if_timer_condition_is_met())
+        }
+        setInterval(update_repeats, 1000 * 60 * 10)
+        update_repeats()
     }
 
     private constructor()
