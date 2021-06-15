@@ -27,8 +27,12 @@ export async function create_report(from: Date, to: Date, type: ReportType): Pro
     const report = new Map()
     string_report.forEach((value, key) => 
     {
+        if (value < 0)
+            return
+
         const category = categories.find(x => x.name == key)
         report.set(category, value)
     })
+
     return report
 }
