@@ -139,6 +139,7 @@ async function add_group_add()
     const name = $('#name-input').value
     const color = parseInt($('#color-input').value.substr(1), 16)
     console.log(color)
+    console.log($('#color-input').value)
 
     switch (add_group_mode)
     {

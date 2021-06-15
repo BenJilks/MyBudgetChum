@@ -16,11 +16,15 @@ export class BarChart
     {
         this.bar_container.innerHTML = ''
         
+        // Find the maximum value to set scale
         const max = Math.max(...data.map(x => Math.abs(x.value)))
+
+        // Create all bars
         const bar_promises: Promise<HTMLDivElement>[] = []
         data.forEach((item, index) =>
             bar_promises.push(this.add_bar(item, max)))
-        
+
+        // Wait for all of them to be created, then add them to the chart
         const bars = await Promise.all(bar_promises)
         bars.forEach(item => this.bar_container.appendChild(item))
     }
@@ -30,6 +34,7 @@ export class BarChart
         const unit = document.createElement('div')
         unit.className = 'unit'
 
+        // Calculate bar posision, size and colour
         const percent = item.value / max * 0.8
         const bar = document.createElement('div')
         bar.id = 'bar'
@@ -43,7 +48,8 @@ export class BarChart
         {
             bar.style.backgroundColor = 'red'
         }
-        
+
+        // Create label
         const label = document.createElement('text')
         label.id = 'label'
         label.innerHTML = `${ await format_money(item.value) }`
@@ -52,10 +58,12 @@ export class BarChart
         else
             label.style.bottom = `-${ 0.6 * 2 }em`
 
+        // Create x-axis label
         const x_label = document.createElement('text')
         x_label.id = 'x-label'
         x_label.innerHTML = item.label
-        
+
+        // Add components to element
         bar.appendChild(label)
         unit.appendChild(bar)
         unit.appendChild(x_label)

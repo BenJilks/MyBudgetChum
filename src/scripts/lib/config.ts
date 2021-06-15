@@ -29,8 +29,11 @@ export class Config
 
     private async load()
     {
+        // Fetch the saved settings
         const config = await DataBase.the().get('config')
         config.forEach(item => this.settings.set(item.key, item.value))
+
+        // Notify everyone who's waiting on this
         this.has_loaded = true
         this.notify_on_load.forEach(resolve => resolve())
     }
@@ -39,6 +42,7 @@ export class Config
     {
         return new Promise(resolve =>
         {
+            // If we haven't loaded yet, wait
             if (!this.has_loaded)
                 this.notify_on_load.push(() => resolve(null))
             else

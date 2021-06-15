@@ -6,9 +6,9 @@ export function $(query: string): any
 
 export function color_from_number(num: number): string
 {
-    const r = num & 0xFF
-    const g = (num >> 4) & 0xFF
-    const b = (num >> 8) & 0xFF
+    const r = (num >> 16) & 0xFF
+    const g = (num >> 8) & 0xFF
+    const b = num & 0xFF
     return `rgb(${ r }, ${ g }, ${ b })`
 }
 
