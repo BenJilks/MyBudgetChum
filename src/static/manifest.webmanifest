@@ -5,12 +5,12 @@
     "icons": 
     [
         {
-            "src": "https://raw.githubusercontent.com/mdn/pwa-examples/master/a2hs/icon/fox-icon.png",
+            "src": "/icon_192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "https://raw.githubusercontent.com/mdn/pwa-examples/master/js13kpwa/icons/icon-512.png",
+            "src": "/icon_512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

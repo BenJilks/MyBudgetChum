@@ -19,7 +19,9 @@ self.addEventListener('install', (e: any) =>
             '/transaction_view.css',
             '/repeat.css',
             '/settings.css',
-            '/logo.png',
+            '/favicon.png',
+            '/logo_192.png',
+            '/logo_512.png',
         ])),
     )
 });
