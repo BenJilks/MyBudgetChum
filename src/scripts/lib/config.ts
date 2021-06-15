@@ -24,6 +24,9 @@ export class Config
         this.settings = new Map()
         this.has_loaded = false
         this.notify_on_load = []
+
+        // NOTE: We pre-load the settings here so we don't have to 
+        //       look at the database whenever we want to access one.
         this.load()
     }
 
@@ -58,10 +61,12 @@ export class Config
 
     public async set(key: string, value: string): Promise<void>
     {
+        // Change the setting locally
         await this.wait_for_load()
         const is_new_value = !this.settings.has(key)
         this.settings.set(key, value)
-        
+
+        // Change it on the database
         const setting = { key: key, value: value }
         if (is_new_value)
             await DataBase.the().insert('config', setting)

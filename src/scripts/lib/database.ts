@@ -27,6 +27,7 @@ export class DataBase
                 : database.createObjectStore(table, { keyPath: key })
         }
 
+        // Create our database schema
         create_table('categories', 'name')
         create_table('places', 'name')
         create_table('transactions', 'timestamp')
@@ -91,11 +92,13 @@ export class DataBase
     {
         return new Promise(async (resolve, reject) =>
         {
+            // Create a transaction
             const on_done = await this.wait_for_transaction()
             const transaction = this.database.transaction([table], mode)
             transaction.onerror = (event: Event) => on_done()
             transaction.oncomplete = () => on_done()
 
+            // Do request
             const store_object = transaction.objectStore(table)
             const request = on_request(store_object)
             request.onerror = () => reject()
@@ -142,10 +145,7 @@ export class DataBase
     {
         this.database = database
         this.database.onerror = (event) =>
-        {
-            // TODO: Do something more sensible here
             console.error(`Database error ${ event.target }`)
-        }
 
         // Tell everyone that the database is ready to use
         if (this.notify_when_database_is_ready != null)
@@ -175,6 +175,19 @@ export class DataBase
         update_repeats()
     }
 
+    private browser_not_supported()
+    {
+        document.write(`
+            <p>Error: Your browser does not support IndexedDB, so cannot run this app. 
+            Please download a browser that is compatable.</p>
+
+            <h4>Some compatable, open browsers:</h4>
+            <a href="https://chromium.org">Chromium</a>
+            <a href="https://www.mozilla.org/en-GB/firefox/new/">Firefox</a>
+            <a href="https://f-droid.org/en/packages/org.mozilla.fennec_fdroid/">Fennec (Android)</a>
+        `)
+    }
+
     private constructor()
     {
         this.is_new_database = false
@@ -184,16 +197,14 @@ export class DataBase
 
         if (!window.indexedDB) 
         {
-            // TODO: Do something more sensible here
-            console.error('IndexedDB not supported')
+            this.browser_not_supported()
             return
         }
 
         const request = window.indexedDB.open('mybudgetingchum', 3)
         request.onerror = () =>
         {
-            // TODO: Do something more sensible here
-            console.error(`Unable to connect to database ${ request.error }`)
+            this.browser_not_supported()
         }
         request.onsuccess = () => this.init_database(request.result)
         request.onupgradeneeded = event => this.create_new_database(event)
