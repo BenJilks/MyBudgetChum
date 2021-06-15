@@ -131,7 +131,7 @@ export class DataBase
             () => null)
     }
 
-    public remove(table: string, key: IDBValidKey): Promise<void>
+    public remove(table: string, key: IDBValidKey | IDBKeyRange): Promise<void>
     {
         return this.do_request(table, 'readwrite',
             store => store.delete(key),

@@ -1,47 +1,58 @@
 <html>
-  <head>
-    {{ templates/header.html }}
-    <link rel="stylesheet" href="transaction_view.css">
-    <script src='transaction_view.js'></script>
-  </head>
-  <body>
-    {{ templates/nav_bar.html transactions=active }}
+    <head>
+        {{ templates/header.html }}
+        <link rel="stylesheet" href="transaction_view.css">
+        <script src='transaction_view.js'></script>
+    </head>
+    <body>
+        {{ templates/nav_bar.html transactions=active }}
 
-    <div class="content">
-      <div class="year">
-        <i class="fa fa-angle-double-left" id="back-a-year"></i>
-        <div id="center">
-          <text id="year-display">2021</text>
-          <i class="fa fa-plus-square" id="add-transaction"></i>
-        </div>
-        <i class="fa fa-angle-double-right" id="forward-a-year"></i>
-      </div>
-      
-      <div id="add-transaction-div" class="add-transaction field-box">
-        <h1>Add New Transactions</h1>
-        <div class="field">
-          <text class="name">Category</text>
-          <select class="input" id="category-input">
-          </select>
-        </div>
-          <div class="field">
-          <text class="name">Place</text>
-          <select class="input" id="place-input">
-          </select>
-        </div>
-        <div class="field">
-          <text class="name">Amount</text>
-          <input class="input" id="amount-input"/>
-        </div>
+        <div class="content">
+            <div class="year">
+                <i class="fa fa-angle-double-left" id="back-a-year"></i>
+                <div id="center">
+                    <text id="year-display">2021</text>
+                    <i class="fa fa-plus-square" id="add-transaction"></i>
+                </div>
+                <i class="fa fa-angle-double-right" id="forward-a-year"></i>
+            </div>
+            
+            <div id="add-transaction-div" class="add-transaction field-box">
+                <h1>Add New Transactions</h1>
+                <div class="field">
+                    <text class="name">Category</text>
+                    <select class="input" id="category-input">
+                    </select>
+                </div>
+                    <div class="field">
+                    <text class="name">Place</text>
+                    <select class="input" id="place-input">
+                    </select>
+                </div>
+                <div class="field">
+                    <text class="name">Type</text>
+                    <select id="type-input" value="Spend">
+                        <option>Spend</option>
+                        <option>Receive</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <text class="name">Amount</text>
+                    <input class="input" id="amount-input"/>
+                </div>
+                <div class="field">
+                    <text class="name">Date</text>
+                    <input type="datetime-local" class="input" id="date-input"/>
+                </div>
 
-        <div class="done-buttons">
-          <button id="add-transaction-cancel">Cancel</button>
-          <button id="add-transaction-add">Add</button>
+                <div class="done-buttons">
+                    <button id="add-transaction-cancel">Cancel</button>
+                    <button id="add-transaction-add">Add</button>
+                </div>
+            </div>
+        
+            <div class="transaction-list" id="transaction-view">
+            </div>
         </div>
-      </div>
-    
-      <div class="transaction-list" id="transaction-view">
-      </div>
-    </div>
-  </body>
+    </body>
 </html>

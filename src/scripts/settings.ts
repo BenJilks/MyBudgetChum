@@ -88,6 +88,7 @@ async function update_budget()
     const is_monthly = $('#monthly').checked ? "true" : "false"
     await Config.the().set('budget', budget)
     await Config.the().set('budget-is-monthly', is_monthly)
+    await DataBase.the().remove('budget-cache', IDBKeyRange.lowerBound(new Date(0)))
 }
 
 async function select_currency()

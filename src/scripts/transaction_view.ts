@@ -1,7 +1,8 @@
 import { Category, Place, Transaction } from './lib/transaction'
 import { format_money, MONTHS, WEEK_DAYS } from './lib/config'
 import { calculate_total_net_budget } from './lib/budget'
-import { $ } from './lib/util'
+import { $, get_week } from './lib/util'
+import { DataBase } from './lib/database'
 
 function ordinal(x: number): string
 {
@@ -69,7 +70,16 @@ async function create_day(day: Date, transactions: Transaction[]): Promise<HTMLD
         item.innerHTML = `
             <text id="place">${ transaction.place.name } (${ transaction.category.name })</text>
             <text id="amount">${ await format_future }</text>
+            <i class="fa fa-trash-o button" aria-hidden="true" id="remove"></i>
         `
+
+        item.querySelector<HTMLElement>('#remove').onclick = async () =>
+        {
+            await DataBase.the().remove('transactions', transaction.timestamp)
+            await DataBase.the().remove('budget-cache', IDBKeyRange.lowerBound(get_week(transaction.timestamp)))
+            await load_year(parseInt($('#year-display').innerHTML))
+        }
+
         items.appendChild(item)
     })
 
@@ -136,7 +146,7 @@ function transactions_in_year(start: Date): Promise<Transaction[]>
 async function load_year(year: number)
 {
     $('#year-display').innerHTML = year.toString()
-    const temp_transaction_container = document.createElement('div')
+    const weeks: HTMLDivElement[] = []
 
     let date = new Date(Date.now())
     date.setHours(0, 0, 0, 0)
@@ -148,12 +158,13 @@ async function load_year(year: number)
     while (day_in_year < 364 + 7)
     {
         const week_div = await create_week(date, transactions)
-        temp_transaction_container.appendChild(week_div)
+        weeks.push(week_div)
         date.setDate(date.getDate() + 7 - date.getDay())
         day_in_year += 7 - date.getDay()
     }
 
-    $('#transaction-view').innerHTML = temp_transaction_container.innerHTML
+    $('#transaction-view').innerHTML = ''
+    weeks.forEach(x => $('#transaction-view').appendChild(x))
 }
 
 function scroll_to_now()
@@ -162,8 +173,7 @@ function scroll_to_now()
     day.setDate(day.getDate() - 7)
 
     let id = absolute_day_id(day).toString()
-    const now_div: Element = $('#transaction-view').querySelector(`[id='${ id }']`)
-    now_div.scrollIntoView()
+    $(`[id='${ id }']`).scrollIntoView()
 }
 
 function get_current_year()
@@ -229,9 +239,17 @@ async function add_transaction_add()
 {
     const amount = parseFloat($('#amount-input').value)
     const category = await Category.get($('#category-input').value)
+    const type = $('#type-input').value
     const place = await Place.get($('#place-input').value)
-    if ((!isNaN(amount))&&(category != null)&&(place !=null)&&(amount != 0)) {
-        await Transaction.new(amount, category, place)
+
+    let date = new Date($('#date-input').value)
+    if (isNaN(date.getTime()))
+        date = new Date(Date.now())
+
+    if (!isNaN(amount) && category != null && place != null && amount != 0)
+    {
+        await Transaction.new(type == 'Spend' ? amount : -amount, category, place, date)
+        await DataBase.the().remove('budget-cache', IDBKeyRange.lowerBound(get_week(date)))
         await load_year(parseInt($('#year-display').innerHTML))
         $('#add-transaction-div').style.display = 'none'
     }
