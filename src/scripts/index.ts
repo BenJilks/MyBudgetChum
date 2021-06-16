@@ -46,7 +46,7 @@ async function load_top_categories(start: Date, end: Date)
         category_div.style.backgroundColor = color_from_number(category.color)
         category_div.innerHTML = `
             <h1>${ category.name }</h1>
-            <h4>${ await format_money(amount) }</h4>
+            <h2>${ await format_money(amount) }</h2>
         `
         $('#top-categories').appendChild(category_div)
     }

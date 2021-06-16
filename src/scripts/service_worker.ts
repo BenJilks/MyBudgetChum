@@ -10,6 +10,7 @@ self.addEventListener('install', (e: any) =>
             '/repeat.html',
             '/settings.html',
             '/index.js',
+	    '/service_worker.js',
             '/spending.js',
             '/transaction_view.js',
             '/repeat.js',
@@ -20,8 +21,8 @@ self.addEventListener('install', (e: any) =>
             '/repeat.css',
             '/settings.css',
             '/favicon.png',
-            '/logo_192.png',
-            '/logo_512.png',
+            '/icon_192.png',
+            '/icon_512.png',
         ])),
     )
 });

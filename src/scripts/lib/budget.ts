@@ -77,7 +77,7 @@ export async function calculate_total_net_budget(date: Date): Promise<[number, n
         net_budget_left += weekly_budget - week_total
 
         // Make sure we never go above twice our weekly budget
-        net_budget_left = Math.max(net_budget_left, weekly_budget * 2)
+        net_budget_left = Math.min(net_budget_left, weekly_budget * 2)
 
         if (current_week < this_week)
             await set_cache(current_week, net_budget_left)
