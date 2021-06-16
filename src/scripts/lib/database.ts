@@ -141,6 +141,51 @@ export class DataBase
             () => null)
     }
 
+    public async export(): Promise<string>
+    {
+        let database: object = {}
+        database['categories'] = await this.get('categories')
+        database['places'] = await this.get('places')
+        database['transactions'] = await this.get('transactions')
+        database['repeat'] = await this.get('repeat')
+        database['config'] = await this.get('config')
+        database['budget-cache'] = await this.get('budget-cache')
+        database['shopping-item'] = await this.get('shopping-item')
+
+        return JSON.stringify(database)
+    }
+
+    public async import(database_string: string): Promise<void>
+    {
+        const database: object = JSON.parse(database_string)
+
+        for (const [table, items] of Object.entries(database))
+        {
+            for (let row of items)
+            {
+                switch (table)
+                {
+                    case 'transactions':
+                        row['timestamp'] = new Date(row['timestamp'])
+                        break
+                    
+                    case 'budget-cache':
+                        row['week'] = new Date(row['week'])
+                        break
+                    
+                    default:
+                        break
+                }
+                await this.update(table, row)
+            }
+        }
+    }
+
+    public reset()
+    {
+        window.indexedDB.deleteDatabase('mybudgetingchum')
+    }
+
     private async init_database(database: IDBDatabase)
     {
         this.database = database

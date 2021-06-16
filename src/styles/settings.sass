@@ -83,3 +83,25 @@
 
 .add-group
     display: none
+
+.database-buttons
+    display: flex
+    flex-wrap: wrap
+    gap: 2em
+    
+    width: 70%
+    margin-top: 2em
+
+    input, label
+        background-color: $accent-color
+        color: $background-color
+        flex-grow: 1
+        flex-basis: 7em
+        cursor: pointer
+    
+    input[type='file']
+        display: none
+
+    #reset-button
+        background-color: #e95c5c
+        color: black

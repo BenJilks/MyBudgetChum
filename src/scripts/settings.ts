@@ -80,6 +80,40 @@ window.onload = async () =>
     $('#budget').onchange = update_budget
     $('#weekly').onchange = update_budget
     $('#monthly').onchange = update_budget
+
+    $('#export-button').onclick = async () =>
+    {
+        const database = await DataBase.the().export()
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(database));
+        element.setAttribute('download', 'mybudgetchum.json');
+        element.style.display = 'none';
+
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+    }
+
+    $('#import-button').onchange = async () =>
+    {
+        const file = $('#import-button').files[0]
+        if (file == null || file == undefined)
+            return
+
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = async event => 
+        {
+            await DataBase.the().import(event.target.result.toString())
+            window.location.reload()
+        }
+    }
+
+    $('#reset-button').onclick = async () =>
+    {
+        await DataBase.the().reset()
+        window.location.reload()
+    }
 }
 
 async function update_budget()
